@@ -1,13 +1,13 @@
-package br.com.jhonecmd.course_api;
+package br.com.jhonecmd.courses_api;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class CourseApiApplication {
+public class CoursesApiApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(CourseApiApplication.class, args);
+		SpringApplication.run(CoursesApiApplication.class, args);
 	}
 
 }
