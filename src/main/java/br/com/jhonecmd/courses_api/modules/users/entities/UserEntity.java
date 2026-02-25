@@ -16,10 +16,16 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.validation.constraints.Email;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
 @Entity(name = "users")
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class UserEntity {
 
     @Id
@@ -56,7 +62,7 @@ public class UserEntity {
             return Position.valueOf(value.toLowerCase());
         } catch (IllegalArgumentException ex) {
             throw new IllegalArgumentException(
-                    "Invalid Value" + "\nThe valid values ​​are: 'rector, director, coordinator, professor, student'");
+                    "Invalid Value" + "\nThe valid values are: 'rector, director, coordinator, professor, student'");
         }
     }
 }
