@@ -12,6 +12,7 @@ import jakarta.validation.Valid;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -24,6 +25,9 @@ public class UserController {
     private CreateUserUseCase createUserUseCase;
 
     @Autowired
+    private PasswordEncoder passwordEncoder;
+
+    @Autowired
     private FetchUserUseCase fetchUserUseCase;
 
     @PostMapping("")
@@ -33,6 +37,10 @@ public class UserController {
             var userEntity = UserEntity.builder().name(createUserDTO.getName()).email(createUserDTO.getEmail())
                     .password(createUserDTO.getPassword()).position(UserEntity.fromValue(createUserDTO.getPosition()))
                     .build();
+
+            var password = this.passwordEncoder.encode(createUserDTO.getPassword());
+
+            userEntity.setPassword(password);
 
             this.createUserUseCase.execute(userEntity);
             return ResponseEntity.status(HttpStatus.CREATED).body(null);

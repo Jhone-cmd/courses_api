@@ -16,7 +16,7 @@ public class CreateUserDTO {
     @NotBlank(message = "Email is required.")
     private String email;
 
-    @Length(min = 8, max = 24, message = "The password length must be between 10 and 100 characters.")
+    @Length(min = 8, max = 100, message = "The password length must be between 10 and 100 characters.")
     private String password;
 
     @NotBlank(message = "Position is required. The valid values are: 'rector, director, coordinator, professor, student'")

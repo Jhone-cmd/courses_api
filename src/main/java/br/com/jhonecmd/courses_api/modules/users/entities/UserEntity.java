@@ -39,7 +39,7 @@ public class UserEntity {
     @Column(unique = true, nullable = false)
     private String email;
 
-    @Length(min = 8, max = 24, message = "The password length must be between 10 and 100 characters.")
+    @Length(min = 8, max = 100, message = "The password length must be between 10 and 100 characters.")
     private String password;
 
     @Enumerated(EnumType.STRING)
