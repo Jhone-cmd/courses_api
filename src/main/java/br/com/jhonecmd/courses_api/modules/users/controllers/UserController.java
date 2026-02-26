@@ -7,7 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import br.com.jhonecmd.courses_api.modules.users.dto.CreateUserDTO;
 import br.com.jhonecmd.courses_api.modules.users.entities.UserEntity;
 import br.com.jhonecmd.courses_api.modules.users.usecases.CreateUserUseCase;
-import br.com.jhonecmd.courses_api.modules.users.usecases.FetchUserUseCase;
+import br.com.jhonecmd.courses_api.modules.users.usecases.FetchAllUserUseCase;
 import jakarta.validation.Valid;
 
 import org.springframework.http.HttpStatus;
@@ -28,7 +28,7 @@ public class UserController {
     private PasswordEncoder passwordEncoder;
 
     @Autowired
-    private FetchUserUseCase fetchUserUseCase;
+    private FetchAllUserUseCase fetchUserUseCase;
 
     @PostMapping("")
     public ResponseEntity<Object> create(@Valid @RequestBody CreateUserDTO createUserDTO) {

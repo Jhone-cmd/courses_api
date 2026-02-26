@@ -9,7 +9,7 @@ import br.com.jhonecmd.courses_api.modules.users.dto.UserResponseDTO;
 import br.com.jhonecmd.courses_api.modules.users.repositories.UserRepository;
 
 @Service
-public class FetchUserUseCase {
+public class FetchAllUserUseCase {
 
     @Autowired
     private UserRepository userRepository;
@@ -18,6 +18,6 @@ public class FetchUserUseCase {
         var users = this.userRepository.findAll();
 
         return users.stream().map(user -> UserResponseDTO.builder().id(user.getId()).name(user.getName())
-                .email(user.getEmail()).position(user.getPosition()).createAt(user.getCreateAt()).build()).toList();
+                .email(user.getEmail()).position(user.getPosition()).createAt(user.getCreatedAt()).build()).toList();
     }
 }

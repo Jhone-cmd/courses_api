@@ -46,7 +46,7 @@ public class UserEntity {
     private Position position;
 
     @CreationTimestamp
-    private LocalDateTime createAt;
+    private LocalDateTime createdAt;
 
     public enum Position {
         rector, director, coordinator, professor, student

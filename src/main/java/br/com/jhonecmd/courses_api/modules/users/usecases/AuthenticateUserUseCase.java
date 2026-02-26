@@ -20,7 +20,7 @@ import br.com.jhonecmd.courses_api.modules.users.repositories.UserRepository;
 @Service
 public class AuthenticateUserUseCase {
 
-    @Value("${security.token")
+    @Value("${security.token}")
     private String secretKey;
 
     @Autowired
