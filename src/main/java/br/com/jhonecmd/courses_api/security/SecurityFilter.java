@@ -27,7 +27,7 @@ public class SecurityFilter extends OncePerRequestFilter {
 
         String header = request.getHeader("Authorization");
 
-        System.out.println(header);
+        // System.out.println(header);
         if (header != null) {
             var token = this.jwtProvider.validateToken(header);
 
@@ -43,7 +43,7 @@ public class SecurityFilter extends OncePerRequestFilter {
             var grants = roles.stream()
                     .map((role) -> new SimpleGrantedAuthority("ROLE_" + role.toString().toUpperCase())).toList();
 
-            System.out.println(grants);
+            // System.out.println(grants);
 
             UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(token.getSubject(), null,
                     grants);
