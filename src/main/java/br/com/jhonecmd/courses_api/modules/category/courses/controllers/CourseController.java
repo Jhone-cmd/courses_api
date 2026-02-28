@@ -3,6 +3,8 @@ package br.com.jhonecmd.courses_api.modules.category.courses.controllers;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import br.com.jhonecmd.courses_api.modules.category.courses.dto.ChangeStatusCourseDTO;
+import br.com.jhonecmd.courses_api.modules.category.courses.usecases.ChangeStatusCourseUseCase;
 import br.com.jhonecmd.courses_api.modules.category.courses.usecases.DeleteCourseUseCase;
 import br.com.jhonecmd.courses_api.modules.category.courses.usecases.FetchAllCourseUseCase;
 import br.com.jhonecmd.courses_api.modules.category.courses.usecases.GetByCourseUseCase;
@@ -13,7 +15,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 
 @RestController
 @RequestMapping("/courses")
@@ -24,6 +28,9 @@ public class CourseController {
 
     @Autowired
     private GetByCourseUseCase getByCourseUseCase;
+
+    @Autowired
+    private ChangeStatusCourseUseCase changeStatusCourseUseCase;
 
     @Autowired
     private DeleteCourseUseCase deleteCourseUseCase;
@@ -48,6 +55,20 @@ public class CourseController {
 
             var result = this.getByCourseUseCase.execute(id);
             return ResponseEntity.ok(result);
+
+        } catch (Exception ex) {
+            return ResponseEntity.badRequest().body(ex.getMessage());
+        }
+    }
+
+    @PatchMapping("/{id}/active")
+    @PreAuthorize("hasRole('RECTOR') or hasRole('DIRECTOR') or hasRole('COORDINATOR')")
+    public ResponseEntity<Object> changeActive(@PathVariable() String id,
+            @RequestBody ChangeStatusCourseDTO changeStatusCourseDTO) {
+        try {
+
+            this.changeStatusCourseUseCase.execute(id, changeStatusCourseDTO.getActive());
+            return ResponseEntity.ok(null);
 
         } catch (Exception ex) {
             return ResponseEntity.badRequest().body(ex.getMessage());

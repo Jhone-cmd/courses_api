@@ -6,21 +6,24 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import br.com.jhonecmd.courses_api.exceptions.CourseNotFound;
-import br.com.jhonecmd.courses_api.modules.category.courses.dto.CourseResponseDTO;
+import br.com.jhonecmd.courses_api.modules.category.courses.entities.CourseEntity;
 import br.com.jhonecmd.courses_api.modules.category.courses.repositories.CourseRepository;
 
 @Service
-public class GetByCourseUseCase {
+public class ChangeStatusCourseUseCase {
+
     @Autowired
     private CourseRepository courseRepository;
 
-    public CourseResponseDTO execute(String id) {
+    public void execute(String id, Boolean active) {
 
-        var course = this.courseRepository.findById(UUID.fromString(id))
+        CourseEntity course = this.courseRepository.findById(UUID.fromString(id))
                 .orElseThrow(() -> new CourseNotFound());
 
-        return CourseResponseDTO.builder().id(course.getId()).name(course.getName())
-                .description(course.getDescription()).categoryName(course.getCategoryEntity().getName())
-                .active(course.getActive()).build();
+        course.setActive(active);
+
+        this.courseRepository.save(course);
+
+        return;
     }
 }

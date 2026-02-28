@@ -5,8 +5,8 @@ import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import br.com.jhonecmd.courses_api.exceptions.CourseNotFound;
 import br.com.jhonecmd.courses_api.modules.category.courses.repositories.CourseRepository;
-import jakarta.persistence.EntityNotFoundException;
 
 @Service
 public class DeleteCourseUseCase {
@@ -17,7 +17,7 @@ public class DeleteCourseUseCase {
     public void execute(String id) {
 
         var course = this.courseRepository.findById(UUID.fromString(id))
-                .orElseThrow(() -> new EntityNotFoundException("Course not found with ID: " + id));
+                .orElseThrow(() -> new CourseNotFound());
 
         this.courseRepository.delete(course);
 
