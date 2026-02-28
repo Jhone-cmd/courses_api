@@ -1,6 +1,7 @@
 package br.com.jhonecmd.courses_api.modules.category.courses.controllers;
 
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import br.com.jhonecmd.courses_api.modules.category.courses.dto.ChangeStatusCourseDTO;
@@ -37,10 +38,10 @@ public class CourseController {
 
     @GetMapping("")
     @PreAuthorize("hasRole('RECTOR') or hasRole('DIRECTOR') or hasRole('COORDINATOR')")
-    public ResponseEntity<Object> fetchAllCourses() {
+    public ResponseEntity<Object> fetchAllCourses(@RequestParam(required = false) Boolean status) {
         try {
 
-            var result = this.fetchAllCourseUseCase.execute();
+            var result = this.fetchAllCourseUseCase.execute(status);
             return ResponseEntity.ok(result);
 
         } catch (Exception ex) {

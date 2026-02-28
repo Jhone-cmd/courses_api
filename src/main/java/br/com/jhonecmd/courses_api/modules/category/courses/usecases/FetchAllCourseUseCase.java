@@ -14,11 +14,14 @@ public class FetchAllCourseUseCase {
     @Autowired
     private CourseRepository courseRepository;
 
-    public List<CourseResponseDTO> execute() {
+    public List<CourseResponseDTO> execute(Boolean status) {
+
         var courses = this.courseRepository.findAll();
 
-        return courses.stream().map((course) -> CourseResponseDTO.builder().id(course.getId()).name(course.getName())
-                .description(course.getDescription()).categoryName(course.getCategoryEntity().getName())
-                .active(course.getActive()).build()).toList();
+        return courses.stream().filter((course) -> status == null || course.getActive().equals(status))
+                .map((course) -> CourseResponseDTO.builder().id(course.getId()).name(course.getName())
+                        .description(course.getDescription()).categoryName(course.getCategoryEntity().getName())
+                        .active(course.getActive()).build())
+                .toList();
     }
 }
