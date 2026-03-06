@@ -5,10 +5,12 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import br.com.jhonecmd.courses_api.modules.category.courses.dto.ChangeStatusCourseDTO;
+import br.com.jhonecmd.courses_api.modules.category.courses.dto.UpdateCourseDTO;
 import br.com.jhonecmd.courses_api.modules.category.courses.usecases.ChangeStatusCourseUseCase;
 import br.com.jhonecmd.courses_api.modules.category.courses.usecases.DeleteCourseUseCase;
 import br.com.jhonecmd.courses_api.modules.category.courses.usecases.FetchAllCourseUseCase;
 import br.com.jhonecmd.courses_api.modules.category.courses.usecases.GetByCourseUseCase;
+import br.com.jhonecmd.courses_api.modules.category.courses.usecases.UpdateCourseUseCase;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -19,6 +21,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.PutMapping;
 
 @RestController
 @RequestMapping("/courses")
@@ -29,6 +32,9 @@ public class CourseController {
 
     @Autowired
     private GetByCourseUseCase getByCourseUseCase;
+
+    @Autowired
+    private UpdateCourseUseCase updateCourseUseCase;
 
     @Autowired
     private ChangeStatusCourseUseCase changeStatusCourseUseCase;
@@ -56,6 +62,20 @@ public class CourseController {
 
             var result = this.getByCourseUseCase.execute(id);
             return ResponseEntity.ok(result);
+
+        } catch (Exception ex) {
+            return ResponseEntity.badRequest().body(ex.getMessage());
+        }
+    }
+
+    @PutMapping("/{id}")
+    @PreAuthorize("hasRole('RECTOR') or hasRole('DIRECTOR') or hasRole('COORDINATOR')")
+    public ResponseEntity<Object> updatedCourse(@PathVariable() String id,
+            @RequestBody UpdateCourseDTO updateCourseDTO) {
+        try {
+
+            var course = this.updateCourseUseCase.execute(id, updateCourseDTO);
+            return ResponseEntity.ok(course);
 
         } catch (Exception ex) {
             return ResponseEntity.badRequest().body(ex.getMessage());
