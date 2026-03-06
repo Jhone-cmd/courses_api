@@ -31,7 +31,7 @@ public class CreateCourseUseCase {
         var user = this.userRepository.findByName(createCourseDTO.getTeacherName())
                 .orElseThrow(() -> new UserNotFound());
 
-        if (user.getPosition() != Position.professor) {
+        if (user.getPosition() != Position.teacher) {
             throw new UserIsNotTeacher();
         }
 

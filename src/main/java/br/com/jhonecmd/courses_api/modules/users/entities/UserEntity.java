@@ -49,7 +49,7 @@ public class UserEntity {
     private LocalDateTime createdAt;
 
     public enum Position {
-        rector, director, coordinator, professor, student
+        rector, director, coordinator, teacher, student
     }
 
     @JsonCreator

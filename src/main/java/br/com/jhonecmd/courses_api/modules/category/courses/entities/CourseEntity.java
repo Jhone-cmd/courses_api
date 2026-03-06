@@ -15,6 +15,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToOne;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -40,7 +41,7 @@ public class CourseEntity {
     @Column(nullable = false)
     private Boolean active;
 
-    @ManyToOne()
+    @OneToOne()
     @JoinColumn(name = "teacher_id", insertable = false, updatable = false)
     private UserEntity userEntity;
 

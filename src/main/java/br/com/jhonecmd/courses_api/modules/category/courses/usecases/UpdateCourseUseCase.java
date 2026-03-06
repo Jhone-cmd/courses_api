@@ -38,6 +38,8 @@ public class UpdateCourseUseCase {
         if (updateCourseDTO.getCategoryName() != null) {
             CategoryEntity category = this.categoryRepository.findByName(updateCourseDTO.getCategoryName())
                     .orElseThrow(() -> new CategoryNoFound());
+
+            course.setCategoryId(category.getId());
             course.setCategoryEntity(category);
         }
 
