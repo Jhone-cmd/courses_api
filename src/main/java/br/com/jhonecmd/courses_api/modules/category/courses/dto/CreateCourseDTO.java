@@ -12,5 +12,7 @@ public class CreateCourseDTO {
     private String name;
     private String description;
     private Boolean active;
+    @NotBlank(message = "teacher is required.")
+    private String teacherName;
     private UUID categoryId;
 }

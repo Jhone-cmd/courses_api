@@ -7,6 +7,7 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import br.com.jhonecmd.courses_api.modules.category.entities.CategoryEntity;
+import br.com.jhonecmd.courses_api.modules.users.entities.UserEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -38,6 +39,13 @@ public class CourseEntity {
 
     @Column(nullable = false)
     private Boolean active;
+
+    @ManyToOne()
+    @JoinColumn(name = "teacher_id", insertable = false, updatable = false)
+    private UserEntity userEntity;
+
+    @Column(name = "teacher_id")
+    private UUID teacherId;
 
     @ManyToOne()
     @JoinColumn(name = "category_id", insertable = false, updatable = false)
