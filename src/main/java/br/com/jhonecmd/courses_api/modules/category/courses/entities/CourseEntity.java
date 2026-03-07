@@ -42,18 +42,12 @@ public class CourseEntity {
     private Boolean active;
 
     @OneToOne()
-    @JoinColumn(name = "teacher_id", insertable = false, updatable = false)
+    @JoinColumn(name = "teacher_id")
     private UserEntity userEntity;
 
-    @Column(name = "teacher_id")
-    private UUID teacherId;
-
     @ManyToOne()
-    @JoinColumn(name = "category_id", insertable = false, updatable = false)
+    @JoinColumn(name = "category_id")
     private CategoryEntity categoryEntity;
-
-    @Column(name = "category_id")
-    private UUID categoryId;
 
     @CreationTimestamp
     private LocalDateTime createdAt;
