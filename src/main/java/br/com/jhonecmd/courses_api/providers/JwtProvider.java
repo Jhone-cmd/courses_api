@@ -1,5 +1,8 @@
 package br.com.jhonecmd.courses_api.providers;
 
+import java.security.interfaces.RSAPublicKey;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -11,13 +14,16 @@ import com.auth0.jwt.interfaces.DecodedJWT;
 @Service
 public class JwtProvider {
 
+    @Autowired
+    private RSAPublicKey publicKey;
+
     @Value("${security.token}")
     private String secretKey;
 
     public DecodedJWT validateToken(String token) {
 
         token = token.replace("Bearer ", "");
-        Algorithm algorithm = Algorithm.HMAC256(secretKey);
+        Algorithm algorithm = Algorithm.RSA256(publicKey);
 
         try {
 

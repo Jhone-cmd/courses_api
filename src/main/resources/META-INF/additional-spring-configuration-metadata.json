@@ -4,6 +4,16 @@
             "name": "security.token",
             "type": "java.lang.String",
             "description": "A description for 'security.token'"
+        },
+        {
+            "name": "security.key.public",
+            "type": "java.lang.String",
+            "description": "A description for 'security.key.public'"
+        },
+        {
+            "name": "security.key.private",
+            "type": "java.lang.String",
+            "description": "A description for 'security.key.private'"
         }
     ]
 }

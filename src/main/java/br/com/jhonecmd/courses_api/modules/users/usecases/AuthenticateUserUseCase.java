@@ -1,5 +1,7 @@
 package br.com.jhonecmd.courses_api.modules.users.usecases;
 
+import java.security.interfaces.RSAPrivateKey;
+import java.security.interfaces.RSAPublicKey;
 import java.time.Duration;
 import java.time.Instant;
 import java.util.Arrays;
@@ -19,6 +21,12 @@ import br.com.jhonecmd.courses_api.modules.users.repositories.UserRepository;
 
 @Service
 public class AuthenticateUserUseCase {
+
+    @Autowired
+    private RSAPrivateKey privateKey;
+
+    @Autowired
+    private RSAPublicKey publicKey;
 
     @Value("${security.token}")
     private String secretKey;
@@ -40,7 +48,10 @@ public class AuthenticateUserUseCase {
             throw new InvalidCredentials();
         }
 
-        Algorithm algorithm = Algorithm.HMAC256(secretKey);
+        // Algorithm algorithm = Algorithm.HMAC256(secretKey);
+
+        Algorithm algorithm = Algorithm.RSA256(publicKey, privateKey);
+
         var expiresIn = Instant.now().plus(Duration.ofDays(7));
 
         var token = JWT.create().withIssuer("courses-api").withSubject(user.getId().toString()).withExpiresAt(expiresIn)
