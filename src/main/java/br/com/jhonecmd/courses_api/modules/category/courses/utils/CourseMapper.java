@@ -5,7 +5,7 @@ import org.mapstruct.*;
 import br.com.jhonecmd.courses_api.modules.category.courses.dto.UpdateCourseDTO;
 import br.com.jhonecmd.courses_api.modules.category.courses.entities.CourseEntity;
 
-@Mapper(componentModel = "spring")
+@Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public interface CourseMapper {
 
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
