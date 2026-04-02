@@ -31,7 +31,7 @@ public class FetchAllCategoryUseCaseTest {
 
     @Test
     @DisplayName("Should be able to list all categories.")
-    public void should_be_able_to_list_all_user() {
+    public void should_be_able_to_list_all_categories() {
 
         var category1 = CategoryEntity.builder()
                 .id(UUID.randomUUID())
