@@ -16,12 +16,13 @@ public class FetchAllCourseUseCase {
 
     public List<CourseResponseDTO> execute(Boolean status) {
 
-        var courses = this.courseRepository.findAll();
+        var courses = (status == null)
+                ? courseRepository.findAll()
+                : courseRepository.findByActive(status);
 
-        return courses.stream().filter((course) -> status == null || course.getActive().equals(status))
-                .map((course) -> CourseResponseDTO.builder().id(course.getId()).name(course.getName())
-                        .description(course.getDescription()).categoryName(course.getCategoryEntity().getName())
-                        .active(course.getActive()).build())
+        return courses.stream().map((course) -> CourseResponseDTO.builder().id(course.getId()).name(course.getName())
+                .description(course.getDescription()).categoryName(course.getCategoryEntity().getName())
+                .active(course.getActive()).build())
                 .toList();
     }
 }

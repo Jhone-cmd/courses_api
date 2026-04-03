@@ -1,5 +1,6 @@
 package br.com.jhonecmd.courses_api.modules.category.courses.repositories;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -9,4 +10,6 @@ import br.com.jhonecmd.courses_api.modules.category.courses.entities.CourseEntit
 
 public interface CourseRepository extends JpaRepository<CourseEntity, UUID> {
     Optional<CourseEntity> findByName(String name);
+
+    List<CourseEntity> findByActive(Boolean active);
 }
