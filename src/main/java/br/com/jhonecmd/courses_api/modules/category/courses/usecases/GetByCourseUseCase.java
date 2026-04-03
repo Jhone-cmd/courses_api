@@ -11,6 +11,7 @@ import br.com.jhonecmd.courses_api.modules.category.courses.repositories.CourseR
 
 @Service
 public class GetByCourseUseCase {
+
     @Autowired
     private CourseRepository courseRepository;
 
