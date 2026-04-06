@@ -24,79 +24,81 @@ import br.com.jhonecmd.courses_api.utils.TestUtils;
 @AutoConfigureMockMvc
 public class UserControllerTest {
 
-    @Autowired
-    private MockMvc mvc;
+        @Autowired
+        private MockMvc mvc;
 
-    @Autowired
-    private UserRepository userRepository;
+        @Autowired
+        private UserRepository userRepository;
 
-    @BeforeEach
-    void setup() {
-        userRepository.deleteAll();
-    }
+        @BeforeEach
+        void setup() {
+                userRepository.deleteAll();
+        }
 
-    @Test
-    @DisplayName("Should be able to create a new user.")
-    public void should_be_able_to_create_a_new_user() throws Exception {
+        @Test
+        @DisplayName("Should be able to create a new user.")
+        public void should_be_able_to_create_a_new_user() throws Exception {
 
-        var createdUserDTO = CreateUserDTO.builder().name("John doe").email("johndoe@email.com")
-                .password("0123456789")
-                .position("director")
-                .build();
+                var createdUserDTO = CreateUserDTO.builder().name("John doe").email("johndoe@email.com")
+                                .password("0123456789")
+                                .position("director")
+                                .build();
 
-        mvc.perform(MockMvcRequestBuilders.post("/users")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(TestUtils.objectToJson(createdUserDTO)))
-                .andExpect(MockMvcResultMatchers.status().isCreated());
-    }
+                mvc.perform(MockMvcRequestBuilders.post("/users")
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(TestUtils.objectToJson(createdUserDTO)))
+                                .andExpect(MockMvcResultMatchers.status().isCreated());
+        }
 
-    @Test
-    @DisplayName("Should not be able to create a new company if him already exists.")
-    public void should_not_be_able_to_create_a_new_company_if_him_already_exists() throws Exception {
+        @Test
+        @DisplayName("Should not be able to create a new user if him already exists.")
+        public void should_not_be_able_to_create_a_new_user_if_him_already_exists() throws Exception {
 
-        var user = UserEntity.builder().name("John doe").email("johndoe@email.com").password("encrypted_password")
-                .position(Position.director)
-                .build();
+                var user = UserEntity.builder().name("John doe").email("johndoe@email.com")
+                                .password("encrypted_password")
+                                .position(Position.director)
+                                .build();
 
-        this.userRepository.saveAndFlush(user);
+                this.userRepository.saveAndFlush(user);
 
-        var createdUserDTO = CreateUserDTO.builder().name("John doe").email("johndoe@email.com")
-                .password("0123456789")
-                .position("director")
-                .build();
+                var createdUserDTO = CreateUserDTO.builder().name("John doe").email("johndoe@email.com")
+                                .password("0123456789")
+                                .position("director")
+                                .build();
 
-        mvc.perform(MockMvcRequestBuilders.post("/users")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(TestUtils.objectToJson(createdUserDTO)))
-                .andExpect(MockMvcResultMatchers.status().isConflict());
-    }
+                mvc.perform(MockMvcRequestBuilders.post("/users")
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(TestUtils.objectToJson(createdUserDTO)))
+                                .andExpect(MockMvcResultMatchers.status().isConflict());
+        }
 
-    @Test
-    @DisplayName("Should not be able to create a new company if validations errors.")
-    public void should_not_be_able_to_create_a_new_company_if_validations_errors() throws Exception {
+        @Test
+        @DisplayName("Should not be able to create a new user if validations errors.")
+        public void should_not_be_able_to_create_a_new_user_if_validations_errors() throws Exception {
 
-        var createdUserDTO = CreateUserDTO.builder().name("John doe").email("").password("encrypted_password")
-                .position("director")
-                .build();
+                var createdUserDTO = CreateUserDTO.builder().name("John doe").email("").password("encrypted_password")
+                                .position("director")
+                                .build();
 
-        mvc.perform(MockMvcRequestBuilders.post("/users")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(TestUtils.objectToJson(createdUserDTO)))
-                .andExpect(MockMvcResultMatchers.status().isBadRequest());
-    }
+                mvc.perform(MockMvcRequestBuilders.post("/users")
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(TestUtils.objectToJson(createdUserDTO)))
+                                .andExpect(MockMvcResultMatchers.status().isBadRequest());
+        }
 
-    @Test
-    @DisplayName("Should be able to fetch all users.")
-    public void should_be_able_to_fetch_all_users() throws Exception {
+        @Test
+        @DisplayName("Should be able to fetch all users.")
+        public void should_be_able_to_fetch_all_users() throws Exception {
 
-        var user = UserEntity.builder().name("John doe").email("johndoe@email.com").password("encrypted_password")
-                .position(Position.director)
-                .build();
+                var user = UserEntity.builder().name("John doe").email("johndoe@email.com")
+                                .password("encrypted_password")
+                                .position(Position.director)
+                                .build();
 
-        this.userRepository.saveAndFlush(user);
+                this.userRepository.saveAndFlush(user);
 
-        mvc.perform(MockMvcRequestBuilders.get("/users")
-                .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(MockMvcResultMatchers.status().isOk());
-    }
+                mvc.perform(MockMvcRequestBuilders.get("/users")
+                                .contentType(MediaType.APPLICATION_JSON))
+                                .andExpect(MockMvcResultMatchers.status().isOk());
+        }
 }
