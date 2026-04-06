@@ -4,6 +4,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import br.com.jhonecmd.courses_api.exceptions.UserAlreadyExists;
 import br.com.jhonecmd.courses_api.modules.users.dto.CreateUserDTO;
 import br.com.jhonecmd.courses_api.modules.users.entities.UserEntity;
 import br.com.jhonecmd.courses_api.modules.users.usecases.CreateUserUseCase;
@@ -37,6 +38,8 @@ public class UserController {
             this.createUserUseCase.execute(userEntity);
             return ResponseEntity.status(HttpStatus.CREATED).body(null);
 
+        } catch (UserAlreadyExists ex) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(ex.getMessage());
         } catch (Exception ex) {
             return ResponseEntity.badRequest().body(ex.getMessage());
         }
