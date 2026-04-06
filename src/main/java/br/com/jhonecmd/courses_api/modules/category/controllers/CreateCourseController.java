@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import br.com.jhonecmd.courses_api.exceptions.CourseAlreadyExists;
 import br.com.jhonecmd.courses_api.modules.category.courses.dto.CreateCourseDTO;
 import br.com.jhonecmd.courses_api.modules.category.courses.usecases.CreateCourseUseCase;
 import jakarta.validation.Valid;
@@ -30,6 +31,8 @@ public class CreateCourseController {
             this.createCourseUseCase.execute(id, createCourseDTO);
             return ResponseEntity.status(HttpStatus.CREATED).body(null);
 
+        } catch (CourseAlreadyExists ex) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(ex.getMessage());
         } catch (Exception ex) {
             return ResponseEntity.badRequest().body(ex.getMessage());
         }
