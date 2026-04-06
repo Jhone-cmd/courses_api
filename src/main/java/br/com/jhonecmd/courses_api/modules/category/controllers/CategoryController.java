@@ -1,8 +1,17 @@
 package br.com.jhonecmd.courses_api.modules.category.controllers;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import br.com.jhonecmd.courses_api.exceptions.CategoryAlreadyExists;
 import br.com.jhonecmd.courses_api.modules.category.courses.dto.CreateCourseDTO;
 import br.com.jhonecmd.courses_api.modules.category.courses.usecases.CreateCourseUseCase;
 import br.com.jhonecmd.courses_api.modules.category.dto.CreateCategoryDTO;
@@ -10,15 +19,6 @@ import br.com.jhonecmd.courses_api.modules.category.entities.CategoryEntity;
 import br.com.jhonecmd.courses_api.modules.category.usecases.CreateCategoryUseCase;
 import br.com.jhonecmd.courses_api.modules.category.usecases.FetchAllCategoryUseCase;
 import jakarta.validation.Valid;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 
 @RestController
 @RequestMapping("/categories")
@@ -43,6 +43,8 @@ public class CategoryController {
 
             return ResponseEntity.status(HttpStatus.CREATED).body(null);
 
+        } catch (CategoryAlreadyExists ex) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(ex.getMessage());
         } catch (Exception ex) {
             return ResponseEntity.badRequest().body(ex.getMessage());
         }
