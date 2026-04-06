@@ -1,4 +1,4 @@
-package br.com.jhonecmd.course_api.modules.category.usecases;
+package br.com.jhonecmd.courses_api.modules.category.usecases;
 
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -18,7 +18,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import br.com.jhonecmd.courses_api.modules.category.entities.CategoryEntity;
 import br.com.jhonecmd.courses_api.modules.category.repositories.CategoryRepository;
-import br.com.jhonecmd.courses_api.modules.category.usecases.FetchAllCategoryUseCase;
 
 @ExtendWith(MockitoExtension.class)
 public class FetchAllCategoryUseCaseTest {

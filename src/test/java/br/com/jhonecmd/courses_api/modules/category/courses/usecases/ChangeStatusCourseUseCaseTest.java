@@ -1,4 +1,4 @@
-package br.com.jhonecmd.course_api.modules.category.courses.usecases;
+package br.com.jhonecmd.courses_api.modules.category.courses.usecases;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.Mockito.times;
@@ -19,7 +19,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import br.com.jhonecmd.courses_api.exceptions.CourseNotFound;
 import br.com.jhonecmd.courses_api.modules.category.courses.entities.CourseEntity;
 import br.com.jhonecmd.courses_api.modules.category.courses.repositories.CourseRepository;
-import br.com.jhonecmd.courses_api.modules.category.courses.usecases.ChangeStatusCourseUseCase;
 
 @ExtendWith(MockitoExtension.class)
 public class ChangeStatusCourseUseCaseTest {

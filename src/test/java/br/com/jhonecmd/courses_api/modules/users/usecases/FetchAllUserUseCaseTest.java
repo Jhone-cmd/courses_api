@@ -1,4 +1,4 @@
-package br.com.jhonecmd.course_api.modules.users.usecases;
+package br.com.jhonecmd.courses_api.modules.users.usecases;
 
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -18,7 +18,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import br.com.jhonecmd.courses_api.modules.users.entities.UserEntity;
 import br.com.jhonecmd.courses_api.modules.users.entities.UserEntity.Position;
 import br.com.jhonecmd.courses_api.modules.users.repositories.UserRepository;
-import br.com.jhonecmd.courses_api.modules.users.usecases.FetchAllUserUseCase;
 
 @ExtendWith(MockitoExtension.class)
 public class FetchAllUserUseCaseTest {

@@ -1,4 +1,4 @@
-package br.com.jhonecmd.course_api;
+package br.com.jhonecmd.courses_api;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
