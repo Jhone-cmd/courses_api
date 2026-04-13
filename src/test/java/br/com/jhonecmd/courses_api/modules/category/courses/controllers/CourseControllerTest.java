@@ -98,4 +98,32 @@ public class CourseControllerTest {
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(MockMvcResultMatchers.status().isOk());
     }
+
+    @Test
+    @DisplayName("Should be able to get specific course.")
+    public void should_be_able_to_get_specific_course() throws Exception {
+
+        var category = CategoryEntity.builder().name("Tecnologia").build();
+        this.categoryRepository.saveAndFlush(category);
+
+        var course = CourseEntity.builder().name("Tecnologia da Informação").categoryEntity(category).active(true)
+                .build();
+
+        var course2 = CourseEntity.builder().name("Engenharia de Software").categoryEntity(category).active(true)
+                .build();
+
+        this.courseRepository.saveAllAndFlush(List.of(course, course2));
+
+        String token = TestUtils.generateToken(
+                user.getId(),
+                user.getPosition().toString(),
+                publicKey,
+                privateKey);
+
+        mvc.perform(MockMvcRequestBuilders.get("/courses/{id}", course.getId().toString())
+                .header("Authorization", token)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.id").value(course.getId().toString()));
+    }
 }
