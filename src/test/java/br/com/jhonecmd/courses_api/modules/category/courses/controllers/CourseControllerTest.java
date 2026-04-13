@@ -18,6 +18,7 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.http.MediaType;
 
+import br.com.jhonecmd.courses_api.modules.category.courses.dto.ChangeStatusCourseDTO;
 import br.com.jhonecmd.courses_api.modules.category.courses.entities.CourseEntity;
 import br.com.jhonecmd.courses_api.modules.category.courses.repositories.CourseRepository;
 import br.com.jhonecmd.courses_api.modules.category.entities.CategoryEntity;
@@ -152,5 +153,35 @@ public class CourseControllerTest {
                 .header("Authorization", token)
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(MockMvcResultMatchers.status().isNoContent());
+    }
+
+    @Test
+    @DisplayName("Should be able to change the course status.")
+    public void should_be_able_to_change_hte_course_status() throws Exception {
+
+        var category = CategoryEntity.builder().name("Tecnologia").build();
+        this.categoryRepository.saveAndFlush(category);
+
+        var course = CourseEntity.builder().name("Tecnologia da Informação").categoryEntity(category).active(true)
+                .build();
+
+        var course2 = CourseEntity.builder().name("Engenharia de Software").categoryEntity(category).active(false)
+                .build();
+
+        this.courseRepository.saveAllAndFlush(List.of(course, course2));
+
+        String token = TestUtils.generateToken(
+                user.getId(),
+                user.getPosition().toString(),
+                publicKey,
+                privateKey);
+
+        var changeStatusCourseDTO = ChangeStatusCourseDTO.builder().active(true).build();
+
+        mvc.perform(MockMvcRequestBuilders.patch("/courses/{id}/active", course2.getId().toString())
+                .header("Authorization", token)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(TestUtils.objectToJson(changeStatusCourseDTO)))
+                .andExpect(MockMvcResultMatchers.status().isOk());
     }
 }
