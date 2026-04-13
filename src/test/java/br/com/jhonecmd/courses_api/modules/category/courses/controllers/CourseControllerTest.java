@@ -126,4 +126,31 @@ public class CourseControllerTest {
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.id").value(course.getId().toString()));
     }
+
+    @Test
+    @DisplayName("Should be able to delete a course.")
+    public void should_be_able_to_delete_a_course() throws Exception {
+
+        var category = CategoryEntity.builder().name("Tecnologia").build();
+        this.categoryRepository.saveAndFlush(category);
+
+        var course = CourseEntity.builder().name("Tecnologia da Informação").categoryEntity(category).active(true)
+                .build();
+
+        var course2 = CourseEntity.builder().name("Engenharia de Software").categoryEntity(category).active(true)
+                .build();
+
+        this.courseRepository.saveAllAndFlush(List.of(course, course2));
+
+        String token = TestUtils.generateToken(
+                user.getId(),
+                user.getPosition().toString(),
+                publicKey,
+                privateKey);
+
+        mvc.perform(MockMvcRequestBuilders.delete("/courses/{id}", course.getId().toString())
+                .header("Authorization", token)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.status().isNoContent());
+    }
 }
