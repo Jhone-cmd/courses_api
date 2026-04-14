@@ -2,6 +2,7 @@ package br.com.jhonecmd.courses_api.modules.users.dto;
 
 import org.hibernate.validator.constraints.Length;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
@@ -15,16 +16,20 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class CreateUserDTO {
 
+    @Schema(example = "Stefanie")
     @NotBlank(message = "Name is required.")
     private String name;
 
+    @Schema(example = "stefanie@yahoo.com")
     @Email(message = "The email field is invalid.")
     @NotBlank(message = "Email is required.")
     private String email;
 
+    @Schema(example = "stefanie!4568")
     @Length(min = 8, max = 100, message = "The password length must be between 10 and 100 characters.")
     private String password;
 
+    @Schema(example = "Director")
     @NotBlank(message = "Position is required. The valid values are: 'rector, director, coordinator, professor, student'")
     private String position;
 }
