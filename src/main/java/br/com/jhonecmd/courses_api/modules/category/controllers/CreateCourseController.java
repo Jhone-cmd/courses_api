@@ -13,10 +13,12 @@ import org.springframework.web.bind.annotation.RestController;
 import br.com.jhonecmd.courses_api.exceptions.CourseAlreadyExists;
 import br.com.jhonecmd.courses_api.modules.category.courses.dto.CreateCourseDTO;
 import br.com.jhonecmd.courses_api.modules.category.courses.usecases.CreateCourseUseCase;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/categories")
+@Tag(name = "Courses", description = "Routes intended for courses.")
 public class CreateCourseController {
 
     @Autowired

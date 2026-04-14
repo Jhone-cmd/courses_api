@@ -11,6 +11,7 @@ import br.com.jhonecmd.courses_api.modules.category.courses.usecases.DeleteCours
 import br.com.jhonecmd.courses_api.modules.category.courses.usecases.FetchAllCourseUseCase;
 import br.com.jhonecmd.courses_api.modules.category.courses.usecases.GetByCourseUseCase;
 import br.com.jhonecmd.courses_api.modules.category.courses.usecases.UpdateCourseUseCase;
+import io.swagger.v3.oas.annotations.tags.Tag;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -25,6 +26,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 
 @RestController
 @RequestMapping("/courses")
+@Tag(name = "Courses", description = "Routes intended for courses.")
 public class CourseController {
 
     @Autowired

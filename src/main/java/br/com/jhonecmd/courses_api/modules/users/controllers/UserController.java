@@ -9,6 +9,7 @@ import br.com.jhonecmd.courses_api.modules.users.dto.CreateUserDTO;
 import br.com.jhonecmd.courses_api.modules.users.entities.UserEntity;
 import br.com.jhonecmd.courses_api.modules.users.usecases.CreateUserUseCase;
 import br.com.jhonecmd.courses_api.modules.users.usecases.FetchAllUserUseCase;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 
 import org.springframework.http.HttpStatus;
@@ -19,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 @RestController
 @RequestMapping("/users")
+@Tag(name = "Users", description = "Routes intended for users.")
 public class UserController {
 
     @Autowired

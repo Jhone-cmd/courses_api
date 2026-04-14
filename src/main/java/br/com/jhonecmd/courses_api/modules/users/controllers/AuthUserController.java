@@ -5,6 +5,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import br.com.jhonecmd.courses_api.modules.users.dto.AuthUserDTO;
 import br.com.jhonecmd.courses_api.modules.users.usecases.AuthenticateUserUseCase;
+import io.swagger.v3.oas.annotations.tags.Tag;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 @RestController
 @RequestMapping("/users")
+@Tag(name = "Users", description = "Routes intended for users.")
 public class AuthUserController {
 
     @Autowired

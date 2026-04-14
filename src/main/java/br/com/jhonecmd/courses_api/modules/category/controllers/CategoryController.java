@@ -15,10 +15,12 @@ import br.com.jhonecmd.courses_api.modules.category.dto.CreateCategoryDTO;
 import br.com.jhonecmd.courses_api.modules.category.entities.CategoryEntity;
 import br.com.jhonecmd.courses_api.modules.category.usecases.CreateCategoryUseCase;
 import br.com.jhonecmd.courses_api.modules.category.usecases.FetchAllCategoryUseCase;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/categories")
+@Tag(name = "Categories", description = "Routes intended for categories.")
 public class CategoryController {
 
     @Autowired
