@@ -17,6 +17,7 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 
@@ -67,6 +68,7 @@ public class UserController {
 
     @GetMapping("")
     @Operation(summary = "View users.", description = "This route is designed to view users.")
+    @SecurityRequirement(name = "auth")
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "List of users retrieved successfully", content = @Content(array = @ArraySchema(schema = @Schema(implementation = UserResponseDTO.class))))
     })
