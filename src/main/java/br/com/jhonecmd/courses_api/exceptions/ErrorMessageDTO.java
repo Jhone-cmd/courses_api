@@ -10,9 +10,9 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class ErrorMessageDTO {
 
-    @Schema(example = "The email field is invalid.")
+    @Schema(example = "The name is required.")
     private String error;
 
-    @Schema(example = "email")
+    @Schema(example = "name")
     private String field;
 }
