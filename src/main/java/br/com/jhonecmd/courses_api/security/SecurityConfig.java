@@ -15,6 +15,7 @@ import org.springframework.security.web.authentication.www.BasicAuthenticationFi
 public class SecurityConfig {
 
     private final String[] PERMIT_ALL_LIST = {
+            "/",
             "/swagger-ui/**",
             "/v3/api-docs/**",
             "/swagger/resources/**",
