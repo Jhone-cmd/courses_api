@@ -11,8 +11,16 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import br.com.jhonecmd.courses_api.exceptions.CourseAlreadyExists;
+import br.com.jhonecmd.courses_api.exceptions.ErrorMessageDTO;
 import br.com.jhonecmd.courses_api.modules.category.courses.dto.CreateCourseDTO;
 import br.com.jhonecmd.courses_api.modules.category.courses.usecases.CreateCourseUseCase;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.ArraySchema;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 
@@ -26,6 +34,17 @@ public class CreateCourseController {
 
     @PostMapping("/{id}/courses")
     @PreAuthorize("hasRole('RECTOR') or hasRole('DIRECTOR') or hasRole('COORDINATOR')")
+    @Operation(summary = "Create a course.", description = "This route is designed to create a course.")
+    @SecurityRequirement(name = "auth")
+    @ApiResponses({
+            @ApiResponse(responseCode = "201", description = "Course created successfully"),
+
+            @ApiResponse(responseCode = "409", description = "Course already exists.", content = {
+                    @Content(schema = @Schema(implementation = CourseAlreadyExists.class, example = "Course already exists!"))
+            }),
+
+            @ApiResponse(responseCode = "400", description = "Validation errors", content = @Content(array = @ArraySchema(schema = @Schema(implementation = ErrorMessageDTO.class))))
+    })
     public ResponseEntity<Object> addCourse(@PathVariable() String id,
             @Valid @RequestBody CreateCourseDTO createCourseDTO) {
         try {

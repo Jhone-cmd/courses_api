@@ -1,18 +1,5 @@
 package br.com.jhonecmd.courses_api.modules.category.courses.controllers;
 
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
-
-import br.com.jhonecmd.courses_api.modules.category.courses.dto.ChangeStatusCourseDTO;
-import br.com.jhonecmd.courses_api.modules.category.courses.dto.UpdateCourseDTO;
-import br.com.jhonecmd.courses_api.modules.category.courses.usecases.ChangeStatusCourseUseCase;
-import br.com.jhonecmd.courses_api.modules.category.courses.usecases.DeleteCourseUseCase;
-import br.com.jhonecmd.courses_api.modules.category.courses.usecases.FetchAllCourseUseCase;
-import br.com.jhonecmd.courses_api.modules.category.courses.usecases.GetByCourseUseCase;
-import br.com.jhonecmd.courses_api.modules.category.courses.usecases.UpdateCourseUseCase;
-import io.swagger.v3.oas.annotations.tags.Tag;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,8 +8,28 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
+import br.com.jhonecmd.courses_api.modules.category.courses.dto.ChangeStatusCourseDTO;
+import br.com.jhonecmd.courses_api.modules.category.courses.dto.CourseResponseDTO;
+import br.com.jhonecmd.courses_api.modules.category.courses.dto.UpdateCourseDTO;
+import br.com.jhonecmd.courses_api.modules.category.courses.usecases.ChangeStatusCourseUseCase;
+import br.com.jhonecmd.courses_api.modules.category.courses.usecases.DeleteCourseUseCase;
+import br.com.jhonecmd.courses_api.modules.category.courses.usecases.FetchAllCourseUseCase;
+import br.com.jhonecmd.courses_api.modules.category.courses.usecases.GetByCourseUseCase;
+import br.com.jhonecmd.courses_api.modules.category.courses.usecases.UpdateCourseUseCase;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.ArraySchema;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.tags.Tag;
 
 @RestController
 @RequestMapping("/courses")
@@ -46,6 +53,11 @@ public class CourseController {
 
     @GetMapping("")
     @PreAuthorize("hasRole('RECTOR') or hasRole('DIRECTOR') or hasRole('COORDINATOR')")
+    @Operation(summary = "View courses.", description = "This route is designed to view courses.")
+    @SecurityRequirement(name = "auth")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "List of courses retrieved successfully", content = @Content(array = @ArraySchema(schema = @Schema(implementation = CourseResponseDTO.class))))
+    })
     public ResponseEntity<Object> fetchAllCourses(@RequestParam(required = false) Boolean status) {
         try {
 
@@ -59,6 +71,11 @@ public class CourseController {
 
     @GetMapping("/{id}")
     @PreAuthorize("hasRole('RECTOR') or hasRole('DIRECTOR') or hasRole('COORDINATOR')")
+    @Operation(summary = "View data for a specific course.", description = "This route is designed to view data for a specific course..")
+    @SecurityRequirement(name = "auth")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Course data viewed.", content = @Content(schema = @Schema(implementation = CourseResponseDTO.class)))
+    })
     public ResponseEntity<Object> getByCourse(@PathVariable() String id) {
         try {
 
@@ -72,6 +89,11 @@ public class CourseController {
 
     @PutMapping("/{id}")
     @PreAuthorize("hasRole('RECTOR') or hasRole('DIRECTOR') or hasRole('COORDINATOR')")
+    @Operation(summary = "Update data a specific course.", description = "This route is designed to update data a specific course.")
+    @SecurityRequirement(name = "auth")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Data updated successfully", content = @Content(schema = @Schema(implementation = UpdateCourseDTO.class)))
+    })
     public ResponseEntity<Object> updatedCourse(@PathVariable() String id,
             @RequestBody UpdateCourseDTO updateCourseDTO) {
         try {
@@ -86,6 +108,11 @@ public class CourseController {
 
     @PatchMapping("/{id}/active")
     @PreAuthorize("hasRole('RECTOR') or hasRole('DIRECTOR') or hasRole('COORDINATOR')")
+    @Operation(summary = "Update status a specific course.", description = "This route is designed to update status a specific course.")
+    @SecurityRequirement(name = "auth")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Status updated successfully")
+    })
     public ResponseEntity<Object> changeActive(@PathVariable() String id,
             @RequestBody ChangeStatusCourseDTO changeStatusCourseDTO) {
         try {
@@ -100,6 +127,11 @@ public class CourseController {
 
     @DeleteMapping("/{id}")
     @PreAuthorize("hasRole('RECTOR') or hasRole('DIRECTOR') or hasRole('COORDINATOR')")
+    @Operation(summary = "Delete a specific course.", description = "This route is designed to delete a specific course.")
+    @SecurityRequirement(name = "auth")
+    @ApiResponses({
+            @ApiResponse(responseCode = "204", description = "Course successfully deleted.")
+    })
     public ResponseEntity<Object> delete(@PathVariable() String id) {
         try {
 
