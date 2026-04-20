@@ -1,5 +1,8 @@
 package br.com.jhonecmd.courses_api.modules.users.controllers;
 
+import java.security.interfaces.RSAPrivateKey;
+import java.security.interfaces.RSAPublicKey;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -30,8 +33,15 @@ public class UserControllerTest {
         @Autowired
         private UserRepository userRepository;
 
+        @Autowired
+        private RSAPrivateKey privateKey;
+
+        @Autowired
+        private RSAPublicKey publicKey;
+
         @BeforeEach
         void setup() {
+
                 userRepository.deleteAll();
         }
 
@@ -97,7 +107,14 @@ public class UserControllerTest {
 
                 this.userRepository.saveAndFlush(user);
 
+                String token = TestUtils.generateToken(
+                                user.getId(),
+                                user.getPosition().toString(),
+                                publicKey,
+                                privateKey);
+
                 mvc.perform(MockMvcRequestBuilders.get("/users")
+                                .header("Authorization", token)
                                 .contentType(MediaType.APPLICATION_JSON))
                                 .andExpect(MockMvcResultMatchers.status().isOk());
         }

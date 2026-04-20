@@ -17,6 +17,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
+import br.com.jhonecmd.courses_api.modules.category.courses.repositories.CourseRepository;
 import br.com.jhonecmd.courses_api.modules.category.dto.CreateCategoryDTO;
 import br.com.jhonecmd.courses_api.modules.category.entities.CategoryEntity;
 import br.com.jhonecmd.courses_api.modules.category.repositories.CategoryRepository;
@@ -30,124 +31,127 @@ import br.com.jhonecmd.courses_api.utils.TestUtils;
 @AutoConfigureMockMvc
 public class CategoryControllerTest {
 
-    @Autowired
-    private MockMvc mvc;
+        @Autowired
+        private MockMvc mvc;
 
-    @Autowired
-    private UserRepository userRepository;
+        @Autowired
+        private UserRepository userRepository;
 
-    @Autowired
-    private CategoryRepository categoryRepository;
+        @Autowired
+        private CategoryRepository categoryRepository;
 
-    @Autowired
-    private PasswordEncoder passwordEncoder;
+        @Autowired
+        private CourseRepository courseRepository;
 
-    private UserEntity user;
+        @Autowired
+        private PasswordEncoder passwordEncoder;
 
-    @Autowired
-    private RSAPrivateKey privateKey;
+        private UserEntity user;
 
-    @Autowired
-    private RSAPublicKey publicKey;
+        @Autowired
+        private RSAPrivateKey privateKey;
 
-    @BeforeEach
-    void setup() {
+        @Autowired
+        private RSAPublicKey publicKey;
 
-        userRepository.deleteAll();
-        categoryRepository.deleteAll();
+        @BeforeEach
+        void setup() {
+                courseRepository.deleteAll();
+                userRepository.deleteAll();
+                categoryRepository.deleteAll();
 
-        user = UserEntity.builder()
-                .name("admin")
-                .email("admin@email.com")
-                .password(passwordEncoder.encode("0123456789"))
-                .position(Position.rector)
-                .build();
+                user = UserEntity.builder()
+                                .name("admin")
+                                .email("admin@email.com")
+                                .password(passwordEncoder.encode("0123456789"))
+                                .position(Position.rector)
+                                .build();
 
-        this.userRepository.saveAndFlush(user);
-    }
+                this.userRepository.saveAndFlush(user);
+        }
 
-    @Test
-    @DisplayName("Should be able to create a new category.")
-    public void should_be_able_to_create_a_new_category() throws Exception {
+        @Test
+        @DisplayName("Should be able to create a new category.")
+        public void should_be_able_to_create_a_new_category() throws Exception {
 
-        var createCategoryDTO = CreateCategoryDTO.builder()
-                .name("Tecnologia")
-                .build();
+                var createCategoryDTO = CreateCategoryDTO.builder()
+                                .name("Tecnologia")
+                                .build();
 
-        String token = TestUtils.generateToken(
-                user.getId(),
-                user.getPosition().toString(),
-                publicKey,
-                privateKey);
+                String token = TestUtils.generateToken(
+                                user.getId(),
+                                user.getPosition().toString(),
+                                publicKey,
+                                privateKey);
 
-        mvc.perform(MockMvcRequestBuilders.post("/categories")
-                .header("Authorization", token)
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(TestUtils.objectToJson(createCategoryDTO)))
-                .andExpect(MockMvcResultMatchers.status().isCreated());
-    }
+                mvc.perform(MockMvcRequestBuilders.post("/categories")
+                                .header("Authorization", token)
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(TestUtils.objectToJson(createCategoryDTO)))
+                                .andExpect(MockMvcResultMatchers.status().isCreated());
+        }
 
-    @Test
-    @DisplayName("Should not be able to create a new category if him already exists.")
-    public void should_not_be_able_to_create_a_new_category_if_him_already_exists() throws Exception {
+        @Test
+        @DisplayName("Should not be able to create a new category if him already exists.")
+        public void should_not_be_able_to_create_a_new_category_if_him_already_exists() throws Exception {
 
-        var category = CategoryEntity.builder().name("Tecnologia").build();
-        this.categoryRepository.saveAndFlush(category);
+                var category = CategoryEntity.builder().name("Tecnologia").build();
+                this.categoryRepository.saveAndFlush(category);
 
-        var createCategoryDTO = CreateCategoryDTO.builder()
-                .name("Tecnologia")
-                .build();
+                var createCategoryDTO = CreateCategoryDTO.builder()
+                                .name("Tecnologia")
+                                .build();
 
-        String token = TestUtils.generateToken(
-                user.getId(),
-                user.getPosition().toString(),
-                publicKey,
-                privateKey);
+                String token = TestUtils.generateToken(
+                                user.getId(),
+                                user.getPosition().toString(),
+                                publicKey,
+                                privateKey);
 
-        mvc.perform(MockMvcRequestBuilders.post("/categories")
-                .header("Authorization", token)
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(TestUtils.objectToJson(createCategoryDTO)))
-                .andExpect(MockMvcResultMatchers.status().isConflict());
-    }
+                mvc.perform(MockMvcRequestBuilders.post("/categories")
+                                .header("Authorization", token)
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(TestUtils.objectToJson(createCategoryDTO)))
+                                .andExpect(MockMvcResultMatchers.status().isConflict());
+        }
 
-    @Test
-    @DisplayName("Should not be able to create a new category if validations errors.")
-    public void should_not_be_able_to_create_a_new_category_if_validations_errors() throws Exception {
+        @Test
+        @DisplayName("Should not be able to create a new category if validations errors.")
+        public void should_not_be_able_to_create_a_new_category_if_validations_errors() throws Exception {
 
-        var createCategoryDTO = CreateCategoryDTO.builder()
-                .name("")
-                .build();
+                var createCategoryDTO = CreateCategoryDTO.builder()
+                                .name("")
+                                .build();
 
-        String token = TestUtils.generateToken(
-                user.getId(),
-                user.getPosition().toString(),
-                publicKey,
-                privateKey);
+                String token = TestUtils.generateToken(
+                                user.getId(),
+                                user.getPosition().toString(),
+                                publicKey,
+                                privateKey);
 
-        mvc.perform(MockMvcRequestBuilders.post("/categories")
-                .header("Authorization", token)
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(TestUtils.objectToJson(createCategoryDTO)))
-                .andExpect(MockMvcResultMatchers.status().isBadRequest());
-    }
+                mvc.perform(MockMvcRequestBuilders.post("/categories")
+                                .header("Authorization", token)
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(TestUtils.objectToJson(createCategoryDTO)))
+                                .andExpect(MockMvcResultMatchers.status().isBadRequest());
+        }
 
-    @Test
-    @DisplayName("Should be able to fetch all categories.")
-    public void should_be_able_to_fetch_all_categories() throws Exception {
+        @Test
+        @DisplayName("Should be able to fetch all categories.")
+        public void should_be_able_to_fetch_all_categories() throws Exception {
 
-        var category = CategoryEntity.builder().name("Tecnologia").build();
-        this.categoryRepository.saveAndFlush(category);
+                var category = CategoryEntity.builder().name("Tecnologia").build();
+                this.categoryRepository.saveAndFlush(category);
 
-        String token = TestUtils.generateToken(
-                user.getId(),
-                user.getPosition().toString(),
-                publicKey,
-                privateKey);
+                String token = TestUtils.generateToken(
+                                user.getId(),
+                                user.getPosition().toString(),
+                                publicKey,
+                                privateKey);
 
-        mvc.perform(MockMvcRequestBuilders.get("/categories")
-                .header("Authorization", token)
-                .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(MockMvcResultMatchers.status().isOk());
-    }
+                mvc.perform(MockMvcRequestBuilders.get("/categories")
+                                .header("Authorization", token)
+                                .contentType(MediaType.APPLICATION_JSON))
+                                .andExpect(MockMvcResultMatchers.status().isOk());
+        }
 }
