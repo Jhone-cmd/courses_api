@@ -19,5 +19,21 @@ services:
     ports:
       - "9000:9000"
 
+  prometheus:
+    container_name: prometheus_courses
+    image: prom/prometheus:latest
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./config/prometheus.yml:/etc/prometheus/prometheus.yml
+      - prometheus_data:/prometheus
+    networks:
+      - monitoring
+
 volumes:
   postgres_data:
+  prometheus_data:
+
+networks:
+  monitoring:
+    driver: bridge
