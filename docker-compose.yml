@@ -30,9 +30,20 @@ services:
     networks:
       - monitoring
 
+  grafana:
+    container_name: grafana_courses
+    image: grafana/grafana:latest
+    ports:
+      - "3000:3000"
+    volumes:
+      - grafana_data:/var/lib/grafana
+    networks:
+      - monitoring
+
 volumes:
   postgres_data:
   prometheus_data:
+  grafana_data:
 
 networks:
   monitoring:
