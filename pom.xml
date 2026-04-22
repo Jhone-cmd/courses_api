@@ -10,9 +10,9 @@
 		<!-- lookup parent from repository -->
 	</parent>
 	<groupId>br.com.jhonecmd</groupId>
-	<artifactId>course_api</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
-	<name>course_api</name>
+	<artifactId>courses_api</artifactId>
+	<version>0.0.1</version>
+	<name>courses_api</name>
 	<description>Demo project for Spring Boot</description>
 	<url/>
 	<licenses>
