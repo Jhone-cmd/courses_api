@@ -54,13 +54,15 @@ public class AuthenticateUserUseCase {
 
         var expiresIn = Instant.now().plus(Duration.ofDays(7));
 
+        var roles = Arrays.asList(user.getPosition().toString());
+
         var token = JWT.create().withIssuer("courses-api").withSubject(user.getId().toString()).withExpiresAt(expiresIn)
                 .withClaim("roles",
-                        Arrays.asList(user.getPosition().toString()))
+                        roles)
                 .sign(algorithm);
 
         var authUserResponseDTO = AuthUserResponseDTO.builder().access_token(token).expiresAt(expiresIn.toEpochMilli())
-                .position(user.getPosition().toString())
+                .position(roles)
                 .build();
 
         return authUserResponseDTO;

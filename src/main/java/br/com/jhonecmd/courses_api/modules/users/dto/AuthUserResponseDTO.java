@@ -1,5 +1,7 @@
 package br.com.jhonecmd.courses_api.modules.users.dto;
 
+import java.util.List;
+
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -17,5 +19,5 @@ public class AuthUserResponseDTO {
     private Long expiresAt;
 
     @Schema(example = "Rector")
-    private String position;
+    private List<String> position;
 }
