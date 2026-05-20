@@ -2,6 +2,9 @@ package br.com.jhonecmd.courses_api.modules.users.controllers;
 
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.UUID;
+
 import org.springframework.beans.factory.annotation.Autowired;
 
 import br.com.jhonecmd.courses_api.exceptions.ErrorMessageDTO;
@@ -11,6 +14,7 @@ import br.com.jhonecmd.courses_api.modules.users.dto.UserResponseDTO;
 import br.com.jhonecmd.courses_api.modules.users.entities.UserEntity;
 import br.com.jhonecmd.courses_api.modules.users.usecases.CreateUserUseCase;
 import br.com.jhonecmd.courses_api.modules.users.usecases.FetchAllUserUseCase;
+import br.com.jhonecmd.courses_api.modules.users.usecases.GetByUserUseCase;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -19,6 +23,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 
 import org.springframework.http.HttpStatus;
@@ -35,6 +40,9 @@ public class UserController {
 
     @Autowired
     private CreateUserUseCase createUserUseCase;
+
+    @Autowired
+    GetByUserUseCase getByUserUseCase;
 
     @Autowired
     private FetchAllUserUseCase fetchUserUseCase;
@@ -62,6 +70,26 @@ public class UserController {
 
         } catch (UserAlreadyExists ex) {
             return ResponseEntity.status(HttpStatus.CONFLICT).body(ex.getMessage());
+        } catch (Exception ex) {
+            return ResponseEntity.badRequest().body(ex.getMessage());
+        }
+    }
+
+    @GetMapping("/profile")
+    @Operation(summary = "View user profile.", description = "This route is designed to view profile of user.")
+    @SecurityRequirement(name = "auth")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", content = {
+                    @Content(schema = @Schema(implementation = UserResponseDTO.class))
+            })
+    })
+    public ResponseEntity<Object> profile(HttpServletRequest request) {
+        try {
+
+            var userId = request.getAttribute("userId");
+            var result = this.getByUserUseCase.execute(UUID.fromString(userId.toString()));
+            return ResponseEntity.ok(result);
+
         } catch (Exception ex) {
             return ResponseEntity.badRequest().body(ex.getMessage());
         }
