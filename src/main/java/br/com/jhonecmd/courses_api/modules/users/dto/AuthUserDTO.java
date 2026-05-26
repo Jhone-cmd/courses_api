@@ -11,9 +11,9 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class AuthUserDTO {
-    @Schema(example = "johndoe@email.com")
+    @Schema(example = "stefanie@yahoo.com")
     private String email;
 
-    @Schema(example = "123457890")
+    @Schema(example = "stefanie!4568")
     private String password;
 }
