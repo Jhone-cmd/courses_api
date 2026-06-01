@@ -4,7 +4,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -16,6 +18,7 @@ import br.com.jhonecmd.courses_api.modules.categories.dto.CategoryResponseDTO;
 import br.com.jhonecmd.courses_api.modules.categories.dto.CreateCategoryDTO;
 import br.com.jhonecmd.courses_api.modules.categories.entities.CategoryEntity;
 import br.com.jhonecmd.courses_api.modules.categories.usecases.CreateCategoryUseCase;
+import br.com.jhonecmd.courses_api.modules.categories.usecases.DeleteCategoryUseCase;
 import br.com.jhonecmd.courses_api.modules.categories.usecases.FetchAllCategoryUseCase;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
@@ -37,6 +40,9 @@ public class CategoryController {
 
     @Autowired
     private FetchAllCategoryUseCase fetchAllCategoryUseCase;
+
+    @Autowired
+    private DeleteCategoryUseCase deleteCategoryUseCase;
 
     @PostMapping("")
     @PreAuthorize("hasRole('RECTOR') or hasRole('DIRECTOR')")
@@ -79,6 +85,24 @@ public class CategoryController {
             var result = this.fetchAllCategoryUseCase.execute();
 
             return ResponseEntity.ok(result);
+
+        } catch (Exception ex) {
+            return ResponseEntity.badRequest().body(ex.getMessage());
+        }
+    }
+
+    @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('RECTOR') or hasRole('DIRECTOR')")
+    @Operation(summary = "Delete a specific category.", description = "This route is designed to delete a specific category.")
+    @SecurityRequirement(name = "auth")
+    @ApiResponses({
+            @ApiResponse(responseCode = "204", description = "Category successfully deleted.")
+    })
+    public ResponseEntity<Object> delete(@PathVariable() String id) {
+        try {
+
+            this.deleteCategoryUseCase.execute(id);
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
 
         } catch (Exception ex) {
             return ResponseEntity.badRequest().body(ex.getMessage());
