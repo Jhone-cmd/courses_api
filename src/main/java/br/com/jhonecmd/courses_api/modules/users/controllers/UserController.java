@@ -9,13 +9,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import br.com.jhonecmd.courses_api.exceptions.ErrorMessageDTO;
 import br.com.jhonecmd.courses_api.exceptions.UserAlreadyExists;
+import br.com.jhonecmd.courses_api.modules.categories.courses.dto.UpdateCourseDTO;
 import br.com.jhonecmd.courses_api.modules.users.dto.CreateUserDTO;
+import br.com.jhonecmd.courses_api.modules.users.dto.UpdateUserDTO;
 import br.com.jhonecmd.courses_api.modules.users.dto.UserResponseDTO;
 import br.com.jhonecmd.courses_api.modules.users.entities.UserEntity;
 import br.com.jhonecmd.courses_api.modules.users.usecases.CreateUserUseCase;
 import br.com.jhonecmd.courses_api.modules.users.usecases.DeleteUserUseCase;
 import br.com.jhonecmd.courses_api.modules.users.usecases.FetchAllUserUseCase;
 import br.com.jhonecmd.courses_api.modules.users.usecases.GetByUserUseCase;
+import br.com.jhonecmd.courses_api.modules.users.usecases.UpdateUserUseCase;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -34,6 +37,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
 @RestController
@@ -49,6 +53,9 @@ public class UserController {
 
     @Autowired
     private FetchAllUserUseCase fetchUserUseCase;
+
+    @Autowired
+    private UpdateUserUseCase updateUserUseCase;
 
     @Autowired
     private DeleteUserUseCase deleteUserUseCase;
@@ -93,7 +100,7 @@ public class UserController {
         try {
 
             var userId = request.getAttribute("userId");
-            var result = this.getByUserUseCase.execute(UUID.fromString(userId.toString()));
+            var result = this.getByUserUseCase.execute(userId.toString());
             return ResponseEntity.ok(result);
 
         } catch (Exception ex) {
@@ -113,6 +120,25 @@ public class UserController {
 
             var users = this.fetchUserUseCase.execute();
             return ResponseEntity.status(HttpStatus.OK).body(users);
+
+        } catch (Exception ex) {
+            return ResponseEntity.badRequest().body(ex.getMessage());
+        }
+    }
+
+    @PutMapping("/{id}")
+    @PreAuthorize("hasRole('RECTOR')")
+    @Operation(summary = "Update data a specific user.", description = "This route is designed to update data a specific user.")
+    @SecurityRequirement(name = "auth")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Data updated successfully", content = @Content(schema = @Schema(implementation = UpdateUserDTO.class)))
+    })
+    public ResponseEntity<Object> update(@PathVariable() String id,
+            @RequestBody UpdateUserDTO updateUserDTO) {
+        try {
+
+            var user = this.updateUserUseCase.execute(id, updateUserDTO);
+            return ResponseEntity.ok(user);
 
         } catch (Exception ex) {
             return ResponseEntity.badRequest().body(ex.getMessage());

@@ -1,4 +1,4 @@
-package br.com.jhonecmd.courses_api.modules.categories.courses.utils;
+package br.com.jhonecmd.courses_api.utils;
 
 import org.mapstruct.BeanMapping;
 import org.mapstruct.MappingTarget;

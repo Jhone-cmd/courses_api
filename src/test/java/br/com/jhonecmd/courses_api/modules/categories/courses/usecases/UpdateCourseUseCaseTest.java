@@ -26,9 +26,9 @@ import br.com.jhonecmd.courses_api.modules.categories.courses.entities.CourseEnt
 import br.com.jhonecmd.courses_api.modules.categories.courses.repositories.CourseRepository;
 import br.com.jhonecmd.courses_api.modules.categories.courses.usecases.GetByCourseUseCase;
 import br.com.jhonecmd.courses_api.modules.categories.courses.usecases.UpdateCourseUseCase;
-import br.com.jhonecmd.courses_api.modules.categories.courses.utils.CourseMapper;
 import br.com.jhonecmd.courses_api.modules.categories.entities.CategoryEntity;
 import br.com.jhonecmd.courses_api.modules.categories.repositories.CategoryRepository;
+import br.com.jhonecmd.courses_api.utils.CourseMapper;
 
 @ExtendWith(MockitoExtension.class)
 public class UpdateCourseUseCaseTest {

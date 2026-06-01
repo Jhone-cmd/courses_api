@@ -15,9 +15,9 @@ public class GetByUserUseCase {
     @Autowired
     private UserRepository userRepository;
 
-    public UserResponseDTO execute(UUID id) {
+    public UserResponseDTO execute(String userId) {
 
-        var user = this.userRepository.findById(id).orElseThrow(() -> {
+        var user = this.userRepository.findById(UUID.fromString(userId)).orElseThrow(() -> {
             throw new UserNotFound();
         });
 

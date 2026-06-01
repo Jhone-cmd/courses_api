@@ -11,9 +11,9 @@ import br.com.jhonecmd.courses_api.modules.categories.courses.dto.CourseResponse
 import br.com.jhonecmd.courses_api.modules.categories.courses.dto.UpdateCourseDTO;
 import br.com.jhonecmd.courses_api.modules.categories.courses.entities.CourseEntity;
 import br.com.jhonecmd.courses_api.modules.categories.courses.repositories.CourseRepository;
-import br.com.jhonecmd.courses_api.modules.categories.courses.utils.CourseMapper;
 import br.com.jhonecmd.courses_api.modules.categories.entities.CategoryEntity;
 import br.com.jhonecmd.courses_api.modules.categories.repositories.CategoryRepository;
+import br.com.jhonecmd.courses_api.utils.CourseMapper;
 
 @Service
 public class UpdateCourseUseCase {
