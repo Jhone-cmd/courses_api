@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -16,10 +17,12 @@ import br.com.jhonecmd.courses_api.exceptions.CategoryAlreadyExists;
 import br.com.jhonecmd.courses_api.exceptions.ErrorMessageDTO;
 import br.com.jhonecmd.courses_api.modules.categories.dto.CategoryResponseDTO;
 import br.com.jhonecmd.courses_api.modules.categories.dto.CreateCategoryDTO;
+import br.com.jhonecmd.courses_api.modules.categories.dto.UpdateCategoryDTO;
 import br.com.jhonecmd.courses_api.modules.categories.entities.CategoryEntity;
 import br.com.jhonecmd.courses_api.modules.categories.usecases.CreateCategoryUseCase;
 import br.com.jhonecmd.courses_api.modules.categories.usecases.DeleteCategoryUseCase;
 import br.com.jhonecmd.courses_api.modules.categories.usecases.FetchAllCategoryUseCase;
+import br.com.jhonecmd.courses_api.modules.categories.usecases.UpdateCategoryUseCase;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -40,6 +43,9 @@ public class CategoryController {
 
     @Autowired
     private FetchAllCategoryUseCase fetchAllCategoryUseCase;
+
+    @Autowired
+    private UpdateCategoryUseCase updateCategoryUseCase;
 
     @Autowired
     private DeleteCategoryUseCase deleteCategoryUseCase;
@@ -85,6 +91,25 @@ public class CategoryController {
             var result = this.fetchAllCategoryUseCase.execute();
 
             return ResponseEntity.ok(result);
+
+        } catch (Exception ex) {
+            return ResponseEntity.badRequest().body(ex.getMessage());
+        }
+    }
+
+    @PutMapping("/{id}")
+    @PreAuthorize("hasRole('RECTOR') or hasRole('DIRECTOR')")
+    @Operation(summary = "Update data a specific category.", description = "This route is designed to update data a specific category.")
+    @SecurityRequirement(name = "auth")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Data updated successfully", content = @Content(schema = @Schema(implementation = UpdateCategoryDTO.class)))
+    })
+    public ResponseEntity<Object> update(@PathVariable() String id,
+            @RequestBody UpdateCategoryDTO updateCategoryDTO) {
+        try {
+
+            this.updateCategoryUseCase.execute(id, updateCategoryDTO);
+            return ResponseEntity.ok(null);
 
         } catch (Exception ex) {
             return ResponseEntity.badRequest().body(ex.getMessage());
