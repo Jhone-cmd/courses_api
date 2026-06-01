@@ -13,6 +13,7 @@ import br.com.jhonecmd.courses_api.modules.users.dto.CreateUserDTO;
 import br.com.jhonecmd.courses_api.modules.users.dto.UserResponseDTO;
 import br.com.jhonecmd.courses_api.modules.users.entities.UserEntity;
 import br.com.jhonecmd.courses_api.modules.users.usecases.CreateUserUseCase;
+import br.com.jhonecmd.courses_api.modules.users.usecases.DeleteUserUseCase;
 import br.com.jhonecmd.courses_api.modules.users.usecases.FetchAllUserUseCase;
 import br.com.jhonecmd.courses_api.modules.users.usecases.GetByUserUseCase;
 import io.swagger.v3.oas.annotations.Operation;
@@ -29,7 +30,9 @@ import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
@@ -46,6 +49,9 @@ public class UserController {
 
     @Autowired
     private FetchAllUserUseCase fetchUserUseCase;
+
+    @Autowired
+    private DeleteUserUseCase deleteUserUseCase;
 
     @PostMapping("")
     @Operation(summary = "Create a user.", description = "This route is designed to create a user.")
@@ -107,6 +113,24 @@ public class UserController {
 
             var users = this.fetchUserUseCase.execute();
             return ResponseEntity.status(HttpStatus.OK).body(users);
+
+        } catch (Exception ex) {
+            return ResponseEntity.badRequest().body(ex.getMessage());
+        }
+    }
+
+    @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('RECTOR')")
+    @Operation(summary = "Delete a specific user.", description = "This route is designed to delete a specific user.")
+    @SecurityRequirement(name = "auth")
+    @ApiResponses({
+            @ApiResponse(responseCode = "204", description = "User successfully deleted.")
+    })
+    public ResponseEntity<Object> delete(@PathVariable() String id) {
+        try {
+
+            this.deleteUserUseCase.execute(id);
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
 
         } catch (Exception ex) {
             return ResponseEntity.badRequest().body(ex.getMessage());

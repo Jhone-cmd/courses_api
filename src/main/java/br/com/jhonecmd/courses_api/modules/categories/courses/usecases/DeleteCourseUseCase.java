@@ -14,9 +14,9 @@ public class DeleteCourseUseCase {
     @Autowired
     private CourseRepository courseRepository;
 
-    public void execute(String id) {
+    public void execute(String courseId) {
 
-        var course = this.courseRepository.findById(UUID.fromString(id))
+        var course = this.courseRepository.findById(UUID.fromString(courseId))
                 .orElseThrow(() -> new CourseNotFound());
 
         this.courseRepository.delete(course);
