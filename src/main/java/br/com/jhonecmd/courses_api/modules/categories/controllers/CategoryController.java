@@ -22,7 +22,9 @@ import br.com.jhonecmd.courses_api.modules.categories.entities.CategoryEntity;
 import br.com.jhonecmd.courses_api.modules.categories.usecases.CreateCategoryUseCase;
 import br.com.jhonecmd.courses_api.modules.categories.usecases.DeleteCategoryUseCase;
 import br.com.jhonecmd.courses_api.modules.categories.usecases.FetchAllCategoryUseCase;
+import br.com.jhonecmd.courses_api.modules.categories.usecases.GetByCategoryUseCase;
 import br.com.jhonecmd.courses_api.modules.categories.usecases.UpdateCategoryUseCase;
+import br.com.jhonecmd.courses_api.modules.users.dto.UserResponseDTO;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -43,6 +45,9 @@ public class CategoryController {
 
     @Autowired
     private FetchAllCategoryUseCase fetchAllCategoryUseCase;
+
+    @Autowired
+    private GetByCategoryUseCase getByCategoryUseCase;
 
     @Autowired
     private UpdateCategoryUseCase updateCategoryUseCase;
@@ -90,6 +95,26 @@ public class CategoryController {
 
             var result = this.fetchAllCategoryUseCase.execute();
 
+            return ResponseEntity.ok(result);
+
+        } catch (Exception ex) {
+            return ResponseEntity.badRequest().body(ex.getMessage());
+        }
+    }
+
+    @GetMapping("/{id}")
+    @PreAuthorize("hasRole('RECTOR') or hasRole('DIRECTOR') or hasRole('COORDINATOR')")
+    @Operation(summary = "View specific category.", description = "This route is designed to view specific category.")
+    @SecurityRequirement(name = "auth")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "View specific category", content = {
+                    @Content(schema = @Schema(implementation = CategoryResponseDTO.class))
+            })
+    })
+    public ResponseEntity<Object> getByCategory(@PathVariable() String id) {
+        try {
+
+            var result = this.getByCategoryUseCase.execute(id);
             return ResponseEntity.ok(result);
 
         } catch (Exception ex) {
