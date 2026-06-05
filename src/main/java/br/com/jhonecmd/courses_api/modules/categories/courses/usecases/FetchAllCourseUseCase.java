@@ -22,7 +22,7 @@ public class FetchAllCourseUseCase {
 
         return courses.stream().map((course) -> CourseResponseDTO.builder().id(course.getId()).name(course.getName())
                 .description(course.getDescription()).categoryName(course.getCategoryEntity().getName())
-                .active(course.getActive()).build())
+                .active(course.getActive()).teacherName(course.getUserEntity().getName()).build())
                 .toList();
     }
 }

@@ -25,6 +25,9 @@ public class CourseResponseDTO {
     @Schema(example = "Tecnologia")
     private String categoryName;
 
+    @Schema(example = "Jose Doe")
+    private String teacherName;
+
     private Boolean active;
 
 }

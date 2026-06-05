@@ -7,12 +7,16 @@ import org.springframework.stereotype.Service;
 
 import br.com.jhonecmd.courses_api.exceptions.CategoryNoFound;
 import br.com.jhonecmd.courses_api.exceptions.CourseNotFound;
+import br.com.jhonecmd.courses_api.exceptions.TeacherAlreadyAssignedException;
+import br.com.jhonecmd.courses_api.exceptions.UserNotFound;
 import br.com.jhonecmd.courses_api.modules.categories.courses.dto.CourseResponseDTO;
 import br.com.jhonecmd.courses_api.modules.categories.courses.dto.UpdateCourseDTO;
 import br.com.jhonecmd.courses_api.modules.categories.courses.entities.CourseEntity;
 import br.com.jhonecmd.courses_api.modules.categories.courses.repositories.CourseRepository;
 import br.com.jhonecmd.courses_api.modules.categories.entities.CategoryEntity;
 import br.com.jhonecmd.courses_api.modules.categories.repositories.CategoryRepository;
+import br.com.jhonecmd.courses_api.modules.users.entities.UserEntity;
+import br.com.jhonecmd.courses_api.modules.users.repositories.UserRepository;
 import br.com.jhonecmd.courses_api.utils.CourseMapper;
 
 @Service
@@ -23,6 +27,9 @@ public class UpdateCourseUseCase {
 
     @Autowired
     private CourseMapper courseMapper;
+
+    @Autowired
+    private UserRepository userRepository;
 
     @Autowired
     private CategoryRepository categoryRepository;
@@ -39,8 +46,20 @@ public class UpdateCourseUseCase {
             CategoryEntity category = this.categoryRepository.findByName(updateCourseDTO.getCategoryName())
                     .orElseThrow(() -> new CategoryNoFound());
 
-            // course.setCategoryId(category.getId());
             course.setCategoryEntity(category);
+        }
+
+        if (updateCourseDTO.getTeacherName() != null) {
+            UserEntity user = this.userRepository.findByName(updateCourseDTO.getTeacherName())
+                    .orElseThrow(() -> new UserNotFound());
+
+            boolean teacherIsBusy = this.courseRepository
+                    .findByUserEntityIdAndIdNot(user.getId(), UUID.fromString(id))
+                    .isPresent();
+
+            if (teacherIsBusy) {
+                throw new TeacherAlreadyAssignedException();
+            }
         }
 
         courseMapper.updateEntityFromDto(updateCourseDTO, course);

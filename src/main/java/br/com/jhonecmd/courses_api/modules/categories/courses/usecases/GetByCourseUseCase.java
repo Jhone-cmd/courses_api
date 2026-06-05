@@ -22,6 +22,7 @@ public class GetByCourseUseCase {
 
         return CourseResponseDTO.builder().id(course.getId()).name(course.getName())
                 .description(course.getDescription()).categoryName(course.getCategoryEntity().getName())
+                .teacherName(course.getUserEntity().getName())
                 .active(course.getActive()).build();
     }
 }
