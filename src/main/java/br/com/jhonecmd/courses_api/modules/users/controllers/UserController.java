@@ -10,10 +10,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import br.com.jhonecmd.courses_api.exceptions.ErrorMessageDTO;
 import br.com.jhonecmd.courses_api.exceptions.UserAlreadyExists;
 import br.com.jhonecmd.courses_api.modules.categories.courses.dto.UpdateCourseDTO;
+import br.com.jhonecmd.courses_api.modules.users.dto.ChangePasswordUserDTO;
 import br.com.jhonecmd.courses_api.modules.users.dto.CreateUserDTO;
 import br.com.jhonecmd.courses_api.modules.users.dto.UpdateUserDTO;
 import br.com.jhonecmd.courses_api.modules.users.dto.UserResponseDTO;
 import br.com.jhonecmd.courses_api.modules.users.entities.UserEntity;
+import br.com.jhonecmd.courses_api.modules.users.usecases.ChangePasswordUseCase;
 import br.com.jhonecmd.courses_api.modules.users.usecases.CreateUserUseCase;
 import br.com.jhonecmd.courses_api.modules.users.usecases.DeleteUserUseCase;
 import br.com.jhonecmd.courses_api.modules.users.usecases.FetchAllUserUseCase;
@@ -35,6 +37,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -56,6 +59,9 @@ public class UserController {
 
     @Autowired
     private UpdateUserUseCase updateUserUseCase;
+
+    @Autowired
+    private ChangePasswordUseCase changePasswordUseCase;
 
     @Autowired
     private DeleteUserUseCase deleteUserUseCase;
@@ -139,6 +145,22 @@ public class UserController {
 
             var user = this.updateUserUseCase.execute(id, updateUserDTO);
             return ResponseEntity.ok(user);
+
+        } catch (Exception ex) {
+            return ResponseEntity.badRequest().body(ex.getMessage());
+        }
+    }
+
+    @PatchMapping("/change-password")
+    @Operation(summary = "Update password a specific user.", description = "This route is designed to update password a specific user.")
+    @ApiResponses({
+            @ApiResponse(responseCode = "204", description = "Password updated successfully", content = @Content(schema = @Schema(implementation = ChangePasswordUserDTO.class)))
+    })
+    public ResponseEntity<Object> changePassword(@Valid @RequestBody ChangePasswordUserDTO changePasswordUserDTO) {
+        try {
+
+            this.changePasswordUseCase.execute(changePasswordUserDTO);
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
 
         } catch (Exception ex) {
             return ResponseEntity.badRequest().body(ex.getMessage());

@@ -3,6 +3,7 @@ package br.com.jhonecmd.courses_api.modules.users.usecases;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.security.SecurityProperties.User;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -24,7 +25,7 @@ public class ChangePasswordUseCase {
 
     public void execute(ChangePasswordUserDTO changePasswordUserDTO) {
 
-        var user = this.userRepository.findByEmail(changePasswordUserDTO.getEmail()).orElseThrow(() -> {
+        UserEntity user = this.userRepository.findByEmail(changePasswordUserDTO.getEmail()).orElseThrow(() -> {
             throw new UserNotFound();
         });
 

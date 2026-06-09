@@ -31,6 +31,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(
                         (auth) -> auth.requestMatchers("/users").permitAll()
                                 .requestMatchers("/users/auth").permitAll()
+                                .requestMatchers("/users/change-password").permitAll()
                                 .requestMatchers(PERMIT_ALL_LIST).permitAll()
                                 .anyRequest().authenticated())
                 .addFilterBefore(securityFilter, BasicAuthenticationFilter.class);
