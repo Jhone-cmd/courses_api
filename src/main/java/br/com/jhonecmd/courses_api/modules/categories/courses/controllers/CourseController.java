@@ -69,6 +69,22 @@ public class CourseController {
         }
     }
 
+    @GetMapping("/v2")
+    @Operation(summary = "View courses.", description = "This route is designed to view courses.")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "List of courses retrieved successfully", content = @Content(array = @ArraySchema(schema = @Schema(implementation = CourseResponseDTO.class))))
+    })
+    public ResponseEntity<Object> fetchAllCoursesV2(@RequestParam(required = false) Boolean status) {
+        try {
+
+            var result = this.fetchAllCourseUseCase.execute(status);
+            return ResponseEntity.ok(result);
+
+        } catch (Exception ex) {
+            return ResponseEntity.badRequest().body(ex.getMessage());
+        }
+    }
+
     @GetMapping("/{id}")
     @PreAuthorize("hasRole('RECTOR') or hasRole('DIRECTOR') or hasRole('COORDINATOR')")
     @Operation(summary = "View data for a specific course.", description = "This route is designed to view data for a specific course..")

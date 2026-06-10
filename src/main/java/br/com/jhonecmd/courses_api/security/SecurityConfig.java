@@ -32,6 +32,7 @@ public class SecurityConfig {
                         (auth) -> auth.requestMatchers("/users").permitAll()
                                 .requestMatchers("/users/auth").permitAll()
                                 .requestMatchers("/users/change-password").permitAll()
+                                .requestMatchers("/courses/v2").permitAll()
                                 .requestMatchers(PERMIT_ALL_LIST).permitAll()
                                 .anyRequest().authenticated())
                 .addFilterBefore(securityFilter, BasicAuthenticationFilter.class);
