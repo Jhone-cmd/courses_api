@@ -2,7 +2,6 @@ package br.com.jhonecmd.courses_api.modules.categories.usecases;
 
 import java.util.UUID;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import br.com.jhonecmd.courses_api.exceptions.CategoryNoFound;
@@ -12,8 +11,11 @@ import br.com.jhonecmd.courses_api.modules.categories.repositories.CategoryRepos
 @Service
 public class GetByCategoryUseCase {
 
-    @Autowired
-    private CategoryRepository categoryRepository;
+    private final CategoryRepository categoryRepository;
+
+    GetByCategoryUseCase(CategoryRepository categoryRepository) {
+        this.categoryRepository = categoryRepository;
+    }
 
     public CategoryResponseDTO execute(String categoryId) {
         var category = this.categoryRepository.findById(UUID.fromString(categoryId)).orElseThrow(() -> {

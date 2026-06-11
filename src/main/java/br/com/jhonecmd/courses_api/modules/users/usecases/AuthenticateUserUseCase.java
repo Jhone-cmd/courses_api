@@ -6,7 +6,6 @@ import java.time.Duration;
 import java.time.Instant;
 import java.util.Arrays;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -22,20 +21,24 @@ import br.com.jhonecmd.courses_api.modules.users.repositories.UserRepository;
 @Service
 public class AuthenticateUserUseCase {
 
-    @Autowired
-    private RSAPrivateKey privateKey;
-
-    @Autowired
-    private RSAPublicKey publicKey;
-
     @Value("${security.token}")
     private String secretKey;
 
-    @Autowired
-    private UserRepository userRepository;
+    private final RSAPrivateKey privateKey;
 
-    @Autowired
-    private PasswordEncoder passwordEncoder;
+    private final RSAPublicKey publicKey;
+
+    private final UserRepository userRepository;
+
+    private final PasswordEncoder passwordEncoder;
+
+    AuthenticateUserUseCase(RSAPrivateKey privateKey, RSAPublicKey publicKey, UserRepository userRepository,
+            PasswordEncoder passwordEncoder) {
+        this.privateKey = privateKey;
+        this.publicKey = publicKey;
+        this.userRepository = userRepository;
+        this.passwordEncoder = passwordEncoder;
+    }
 
     public AuthUserResponseDTO execute(AuthUserDTO authUserDTO) {
         var user = this.userRepository.findByEmail(authUserDTO.getEmail()).orElseThrow(() -> {

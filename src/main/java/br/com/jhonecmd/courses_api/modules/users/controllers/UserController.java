@@ -1,15 +1,20 @@
 package br.com.jhonecmd.courses_api.modules.users.controllers;
 
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.UUID;
-
-import org.springframework.beans.factory.annotation.Autowired;
-
 import br.com.jhonecmd.courses_api.exceptions.ErrorMessageDTO;
 import br.com.jhonecmd.courses_api.exceptions.UserAlreadyExists;
-import br.com.jhonecmd.courses_api.modules.categories.courses.dto.UpdateCourseDTO;
 import br.com.jhonecmd.courses_api.modules.users.dto.ChangePasswordUserDTO;
 import br.com.jhonecmd.courses_api.modules.users.dto.CreateUserDTO;
 import br.com.jhonecmd.courses_api.modules.users.dto.UpdateUserDTO;
@@ -32,39 +37,33 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PatchMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-
 @RestController
 @RequestMapping("/users")
 @Tag(name = "Users", description = "Routes intended for users.")
 public class UserController {
 
-    @Autowired
-    private CreateUserUseCase createUserUseCase;
+    private final CreateUserUseCase createUserUseCase;
 
-    @Autowired
-    GetByUserUseCase getByUserUseCase;
+    private final GetByUserUseCase getByUserUseCase;
 
-    @Autowired
-    private FetchAllUserUseCase fetchUserUseCase;
+    private final FetchAllUserUseCase fetchAllUserUseCase;
 
-    @Autowired
-    private UpdateUserUseCase updateUserUseCase;
+    private final UpdateUserUseCase updateUserUseCase;
 
-    @Autowired
-    private ChangePasswordUseCase changePasswordUseCase;
+    private final ChangePasswordUseCase changePasswordUseCase;
 
-    @Autowired
-    private DeleteUserUseCase deleteUserUseCase;
+    private final DeleteUserUseCase deleteUserUseCase;
+
+    UserController(CreateUserUseCase createUserUseCase, GetByUserUseCase getByUserUseCase,
+            ChangePasswordUseCase changePasswordUseCase, UpdateUserUseCase updateUserUseCase,
+            DeleteUserUseCase deleteUserUseCase, FetchAllUserUseCase fetchAllUserUseCase) {
+        this.createUserUseCase = createUserUseCase;
+        this.getByUserUseCase = getByUserUseCase;
+        this.changePasswordUseCase = changePasswordUseCase;
+        this.updateUserUseCase = updateUserUseCase;
+        this.deleteUserUseCase = deleteUserUseCase;
+        this.fetchAllUserUseCase = fetchAllUserUseCase;
+    }
 
     @PostMapping("")
     @Operation(summary = "Create a user.", description = "This route is designed to create a user.")
@@ -124,7 +123,7 @@ public class UserController {
     public ResponseEntity<Object> fetchAllUsers() {
         try {
 
-            var users = this.fetchUserUseCase.execute();
+            var users = this.fetchAllUserUseCase.execute();
             return ResponseEntity.status(HttpStatus.OK).body(users);
 
         } catch (Exception ex) {

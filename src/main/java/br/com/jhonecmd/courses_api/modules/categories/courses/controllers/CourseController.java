@@ -1,6 +1,5 @@
 package br.com.jhonecmd.courses_api.modules.categories.courses.controllers;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -36,20 +35,25 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 @Tag(name = "Courses", description = "Routes intended for courses.")
 public class CourseController {
 
-    @Autowired
-    private FetchAllCourseUseCase fetchAllCourseUseCase;
+    private final FetchAllCourseUseCase fetchAllCourseUseCase;
 
-    @Autowired
-    private GetByCourseUseCase getByCourseUseCase;
+    private final GetByCourseUseCase getByCourseUseCase;
 
-    @Autowired
-    private UpdateCourseUseCase updateCourseUseCase;
+    private final UpdateCourseUseCase updateCourseUseCase;
 
-    @Autowired
-    private ChangeStatusCourseUseCase changeStatusCourseUseCase;
+    private final ChangeStatusCourseUseCase changeStatusCourseUseCase;
 
-    @Autowired
-    private DeleteCourseUseCase deleteCourseUseCase;
+    private final DeleteCourseUseCase deleteCourseUseCase;
+
+    CourseController(FetchAllCourseUseCase fetchAllCourseUseCase, GetByCourseUseCase getByCourseUseCase,
+            UpdateCourseUseCase updateCourseUseCase, ChangeStatusCourseUseCase changeStatusCourseUseCase,
+            DeleteCourseUseCase deleteCourseUseCase) {
+        this.fetchAllCourseUseCase = fetchAllCourseUseCase;
+        this.getByCourseUseCase = getByCourseUseCase;
+        this.updateCourseUseCase = updateCourseUseCase;
+        this.changeStatusCourseUseCase = changeStatusCourseUseCase;
+        this.deleteCourseUseCase = deleteCourseUseCase;
+    }
 
     @GetMapping("")
     @PreAuthorize("hasRole('RECTOR') or hasRole('DIRECTOR') or hasRole('COORDINATOR')")

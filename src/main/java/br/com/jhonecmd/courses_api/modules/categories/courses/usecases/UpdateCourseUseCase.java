@@ -2,7 +2,6 @@ package br.com.jhonecmd.courses_api.modules.categories.courses.usecases;
 
 import java.util.UUID;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import br.com.jhonecmd.courses_api.exceptions.CategoryNoFound;
@@ -22,20 +21,24 @@ import br.com.jhonecmd.courses_api.utils.CourseMapper;
 @Service
 public class UpdateCourseUseCase {
 
-    @Autowired
-    private CourseRepository courseRepository;
+    private final CourseRepository courseRepository;
 
-    @Autowired
-    private CourseMapper courseMapper;
+    private final CourseMapper courseMapper;
 
-    @Autowired
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
 
-    @Autowired
-    private CategoryRepository categoryRepository;
+    private final CategoryRepository categoryRepository;
 
-    @Autowired
-    private GetByCourseUseCase getByCourseUseCase;
+    private final GetByCourseUseCase getByCourseUseCase;
+
+    UpdateCourseUseCase(CourseRepository courseRepository, CourseMapper courseMapper, UserRepository userRepository,
+            CategoryRepository categoryRepository, GetByCourseUseCase getByCourseUseCase) {
+        this.courseRepository = courseRepository;
+        this.courseMapper = courseMapper;
+        this.userRepository = userRepository;
+        this.categoryRepository = categoryRepository;
+        this.getByCourseUseCase = getByCourseUseCase;
+    }
 
     public CourseResponseDTO execute(String id, UpdateCourseDTO updateCourseDTO) {
 

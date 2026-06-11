@@ -1,6 +1,5 @@
 package br.com.jhonecmd.courses_api.modules.users.usecases;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -11,11 +10,14 @@ import br.com.jhonecmd.courses_api.modules.users.repositories.UserRepository;
 @Service
 public class CreateUserUseCase {
 
-    @Autowired
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
 
-    @Autowired
-    private PasswordEncoder passwordEncoder;
+    private final PasswordEncoder passwordEncoder;
+
+    CreateUserUseCase(UserRepository userRepository, PasswordEncoder passwordEncoder) {
+        this.userRepository = userRepository;
+        this.passwordEncoder = passwordEncoder;
+    }
 
     public void execute(UserEntity userEntity) {
         this.userRepository.findByEmail(userEntity.getEmail()).ifPresent((user) -> {

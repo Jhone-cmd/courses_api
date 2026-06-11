@@ -2,7 +2,6 @@ package br.com.jhonecmd.courses_api.modules.users.usecases;
 
 import java.util.UUID;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import br.com.jhonecmd.courses_api.exceptions.UserNotFound;
@@ -14,14 +13,17 @@ import br.com.jhonecmd.courses_api.utils.UserMapper;
 @Service
 public class UpdateUserUseCase {
 
-    @Autowired
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
 
-    @Autowired
-    private GetByUserUseCase getByUserUseCase;
+    private final GetByUserUseCase getByUserUseCase;
 
-    @Autowired
-    private UserMapper userMapper;
+    private final UserMapper userMapper;
+
+    UpdateUserUseCase(GetByUserUseCase getByUserUseCase, UserRepository userRepository, UserMapper userMapper) {
+        this.getByUserUseCase = getByUserUseCase;
+        this.userRepository = userRepository;
+        this.userMapper = userMapper;
+    }
 
     public UserResponseDTO execute(String userId, UpdateUserDTO updateUserDTO) {
 

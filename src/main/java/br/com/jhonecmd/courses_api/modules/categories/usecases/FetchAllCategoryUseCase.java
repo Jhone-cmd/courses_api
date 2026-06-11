@@ -2,7 +2,6 @@ package br.com.jhonecmd.courses_api.modules.categories.usecases;
 
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import br.com.jhonecmd.courses_api.modules.categories.dto.CategoryResponseDTO;
@@ -11,8 +10,11 @@ import br.com.jhonecmd.courses_api.modules.categories.repositories.CategoryRepos
 @Service
 public class FetchAllCategoryUseCase {
 
-    @Autowired
-    private CategoryRepository categoryRepository;
+    private final CategoryRepository categoryRepository;
+
+    FetchAllCategoryUseCase(CategoryRepository categoryRepository) {
+        this.categoryRepository = categoryRepository;
+    }
 
     public List<CategoryResponseDTO> execute() {
         var categories = this.categoryRepository.findAll();

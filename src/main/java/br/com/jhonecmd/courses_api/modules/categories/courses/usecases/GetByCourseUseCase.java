@@ -2,7 +2,6 @@ package br.com.jhonecmd.courses_api.modules.categories.courses.usecases;
 
 import java.util.UUID;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import br.com.jhonecmd.courses_api.exceptions.CourseNotFound;
@@ -12,8 +11,11 @@ import br.com.jhonecmd.courses_api.modules.categories.courses.repositories.Cours
 @Service
 public class GetByCourseUseCase {
 
-    @Autowired
-    private CourseRepository courseRepository;
+    private final CourseRepository courseRepository;
+
+    GetByCourseUseCase(CourseRepository courseRepository) {
+        this.courseRepository = courseRepository;
+    }
 
     public CourseResponseDTO execute(String id) {
 

@@ -1,6 +1,5 @@
 package br.com.jhonecmd.courses_api.modules.categories.usecases;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import br.com.jhonecmd.courses_api.exceptions.CategoryAlreadyExists;
@@ -10,8 +9,11 @@ import br.com.jhonecmd.courses_api.modules.categories.repositories.CategoryRepos
 @Service
 public class CreateCategoryUseCase {
 
-    @Autowired
-    private CategoryRepository categoryRepository;
+    private final CategoryRepository categoryRepository;
+
+    CreateCategoryUseCase(CategoryRepository categoryRepository) {
+        this.categoryRepository = categoryRepository;
+    }
 
     public void execute(CategoryEntity categoryEntity) {
         this.categoryRepository.findByName(categoryEntity.getName()).ifPresent((category) -> {

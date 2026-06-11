@@ -1,6 +1,5 @@
 package br.com.jhonecmd.courses_api.modules.categories.controllers;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -24,7 +23,6 @@ import br.com.jhonecmd.courses_api.modules.categories.usecases.DeleteCategoryUse
 import br.com.jhonecmd.courses_api.modules.categories.usecases.FetchAllCategoryUseCase;
 import br.com.jhonecmd.courses_api.modules.categories.usecases.GetByCategoryUseCase;
 import br.com.jhonecmd.courses_api.modules.categories.usecases.UpdateCategoryUseCase;
-import br.com.jhonecmd.courses_api.modules.users.dto.UserResponseDTO;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -40,20 +38,25 @@ import jakarta.validation.Valid;
 @Tag(name = "Categories", description = "Routes intended for categories.")
 public class CategoryController {
 
-    @Autowired
-    private CreateCategoryUseCase createCategoryUseCase;
+    private final CreateCategoryUseCase createCategoryUseCase;
 
-    @Autowired
-    private FetchAllCategoryUseCase fetchAllCategoryUseCase;
+    private final FetchAllCategoryUseCase fetchAllCategoryUseCase;
 
-    @Autowired
-    private GetByCategoryUseCase getByCategoryUseCase;
+    private final GetByCategoryUseCase getByCategoryUseCase;
 
-    @Autowired
-    private UpdateCategoryUseCase updateCategoryUseCase;
+    private final UpdateCategoryUseCase updateCategoryUseCase;
 
-    @Autowired
-    private DeleteCategoryUseCase deleteCategoryUseCase;
+    private final DeleteCategoryUseCase deleteCategoryUseCase;
+
+    CategoryController(CreateCategoryUseCase createCategoryUseCase, FetchAllCategoryUseCase fetchAllCategoryUseCase,
+            GetByCategoryUseCase getByCategoryUseCase, DeleteCategoryUseCase deleteCategoryUseCase,
+            UpdateCategoryUseCase updateCategoryUseCase) {
+        this.createCategoryUseCase = createCategoryUseCase;
+        this.fetchAllCategoryUseCase = fetchAllCategoryUseCase;
+        this.getByCategoryUseCase = getByCategoryUseCase;
+        this.deleteCategoryUseCase = deleteCategoryUseCase;
+        this.updateCategoryUseCase = updateCategoryUseCase;
+    }
 
     @PostMapping("")
     @PreAuthorize("hasRole('RECTOR') or hasRole('DIRECTOR')")

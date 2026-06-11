@@ -2,7 +2,6 @@ package br.com.jhonecmd.courses_api.modules.categories.courses.usecases;
 
 import java.util.UUID;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import br.com.jhonecmd.courses_api.exceptions.CategoryNoFound;
@@ -19,14 +18,18 @@ import br.com.jhonecmd.courses_api.modules.users.repositories.UserRepository;
 @Service
 public class CreateCourseUseCase {
 
-    @Autowired
-    private CourseRepository courseRepository;
+    private final CourseRepository courseRepository;
 
-    @Autowired
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
 
-    @Autowired
-    private CategoryRepository categoryRepository;
+    private final CategoryRepository categoryRepository;
+
+    CreateCourseUseCase(CourseRepository courseRepository, UserRepository userRepository,
+            CategoryRepository categoryRepository) {
+        this.courseRepository = courseRepository;
+        this.userRepository = userRepository;
+        this.categoryRepository = categoryRepository;
+    }
 
     public void execute(String categoryId, CreateCourseDTO createCourseDTO) {
         this.courseRepository.findByName(createCourseDTO.getName()).ifPresent((course) -> {

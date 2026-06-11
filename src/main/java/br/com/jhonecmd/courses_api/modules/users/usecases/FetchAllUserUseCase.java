@@ -2,7 +2,6 @@ package br.com.jhonecmd.courses_api.modules.users.usecases;
 
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import br.com.jhonecmd.courses_api.modules.users.dto.UserResponseDTO;
@@ -11,8 +10,11 @@ import br.com.jhonecmd.courses_api.modules.users.repositories.UserRepository;
 @Service
 public class FetchAllUserUseCase {
 
-    @Autowired
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
+
+    FetchAllUserUseCase(UserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
 
     public List<UserResponseDTO> execute() {
         var users = this.userRepository.findAll();

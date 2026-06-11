@@ -1,6 +1,5 @@
 package br.com.jhonecmd.courses_api.modules.categories.controllers;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -29,8 +28,11 @@ import jakarta.validation.Valid;
 @Tag(name = "Courses", description = "Routes intended for courses.")
 public class CreateCourseController {
 
-    @Autowired
-    private CreateCourseUseCase createCourseUseCase;
+    private final CreateCourseUseCase createCourseUseCase;
+
+    CreateCourseController(CreateCourseUseCase createCourseUseCase) {
+        this.createCourseUseCase = createCourseUseCase;
+    }
 
     @PostMapping("/{id}/courses")
     @PreAuthorize("hasRole('RECTOR') or hasRole('DIRECTOR') or hasRole('COORDINATOR')")

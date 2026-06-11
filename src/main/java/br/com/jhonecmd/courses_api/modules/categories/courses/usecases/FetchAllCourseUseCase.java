@@ -2,7 +2,6 @@ package br.com.jhonecmd.courses_api.modules.categories.courses.usecases;
 
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import br.com.jhonecmd.courses_api.modules.categories.courses.dto.CourseResponseDTO;
@@ -11,8 +10,11 @@ import br.com.jhonecmd.courses_api.modules.categories.courses.repositories.Cours
 @Service
 public class FetchAllCourseUseCase {
 
-    @Autowired
-    private CourseRepository courseRepository;
+    private final CourseRepository courseRepository;
+
+    FetchAllCourseUseCase(CourseRepository courseRepository) {
+        this.courseRepository = courseRepository;
+    }
 
     public List<CourseResponseDTO> execute(Boolean status) {
 
