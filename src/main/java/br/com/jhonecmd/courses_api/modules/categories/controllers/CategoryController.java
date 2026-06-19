@@ -106,7 +106,7 @@ public class CategoryController {
     }
 
     @GetMapping("/{id}")
-    @PreAuthorize("hasRole('RECTOR') or hasRole('DIRECTOR') or hasRole('COORDINATOR')")
+    @PreAuthorize("hasRole('RECTOR') or hasRole('DIRECTOR')")
     @Operation(summary = "View specific category.", description = "This route is designed to view specific category.")
     @SecurityRequirement(name = "auth")
     @ApiResponses({
