@@ -132,7 +132,6 @@ public class UserController {
     }
 
     @PutMapping("/{id}")
-    @PreAuthorize("hasRole('RECTOR')")
     @Operation(summary = "Update data a specific user.", description = "This route is designed to update data a specific user.")
     @SecurityRequirement(name = "auth")
     @ApiResponses({
